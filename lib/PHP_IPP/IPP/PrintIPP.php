@@ -733,7 +733,7 @@ class PrintIPP extends BasicIPP
 				case 'all':
 					break;
 				default:
-					trigger_error(_('not a valid attribute group: ') . $attributes_group, E_USER_NOTICE);
+					trigger_error(('not a valid attribute group: ') . $attributes_group, E_USER_NOTICE);
 					$attributes_group = '';
 					break;
 			}
@@ -813,13 +813,13 @@ class PrintIPP extends BasicIPP
 				break;
 		}
 
-		trigger_error(sprintf(_('Setting Error %s'), $error), E_USER_NOTICE);
+		trigger_error(sprintf(('Setting Error %s'), $error), E_USER_NOTICE);
 	}
 
 	public function resetError($error)
 	{
 		unset ($this->error_generation->$error);
-		trigger_error(sprintf(_('Reset Error %s'), $error), E_USER_NOTICE);
+		trigger_error(sprintf(('Reset Error %s'), $error), E_USER_NOTICE);
 	}
 
 	// SETUP

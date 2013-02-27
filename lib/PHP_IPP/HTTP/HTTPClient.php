@@ -174,7 +174,7 @@ class HTTPClient
 		}
 		$this->connection = @fsockopen($transport_type . $url, $port, $errno, $errstr, $this->timeout);
 		$error =
-			sprintf(_('Unable to connect to "%s%s port %s": %s'), $transport_type,
+			sprintf(('Unable to connect to "%s%s port %s": %s'), $transport_type,
 				$url, $port, $errstr);
 		if (!$this->connection)
 		{
@@ -187,7 +187,7 @@ class HTTPClient
 	public function SendRequest($arguments)
 	{
 		$error =
-			sprintf(_('Streaming request failed to %s'), $arguments['RequestURI']);
+			sprintf(('Streaming request failed to %s'), $arguments['RequestURI']);
 		$result = self::_StreamRequest($arguments);
 		if (!$result[0])
 		{
@@ -228,7 +228,7 @@ class HTTPClient
 		self::Close();
 		self::Open($arguments);
 
-		$error = sprintf(_('Streaming request failed to %s after a try to authenticate'), $arguments['RequestURI']);
+		$error = sprintf(('Streaming request failed to %s after a try to authenticate'), $arguments['RequestURI']);
 		$result = self::_StreamRequest($arguments);
 		if (!$result[0])
 		{

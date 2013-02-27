@@ -448,7 +448,7 @@ class BasicIPP
 				. "message"
 				. self::_giveMeStringLength(substr($message, 0, 127))
 				. substr($message, 0, 127);
-		self::_putDebug(sprintf(_('Setting message to "%s"'), $message), 2);
+		self::_putDebug(sprintf(('Setting message to "%s"'), $message), 2);
 	}
 
 	public function setPageRanges($page_ranges)
@@ -538,13 +538,13 @@ class BasicIPP
 		else
 		{
 			trigger_error(
-				sprintf(_('SetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(('SetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), E_USER_NOTICE);
 			self::_putDebug(
-				sprintf(_('SetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(('SetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), 3);
 			self::_errorLog(
-				sprintf(_('SetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(('SetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), 2);
 			return FALSE;
 		}
@@ -579,13 +579,13 @@ class BasicIPP
 		else
 		{
 			trigger_error(
-				sprintf(_('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), E_USER_NOTICE);
 			self::_putDebug(
-				sprintf(_('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), 3);
 			self::_errorLog(
-				sprintf(_('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), 2);
 			return FALSE;
 		}
@@ -1860,9 +1860,9 @@ class BasicIPP
 				break;
 
 			default:
-				trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
-				self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
-				self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				trigger_error(sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
+				self::_putDebug(sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				self::_errorLog(sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
 				return FALSE;
 				break;
 		}
@@ -1885,9 +1885,9 @@ class BasicIPP
 				break;
 
 			default:
-				trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
-				self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
-				self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				trigger_error(sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
+				self::_putDebug(sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				self::_errorLog(sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
 				return FALSE;
 				break;
 		}
@@ -1910,9 +1910,9 @@ class BasicIPP
 				break;
 
 			default:
-				trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
-				self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
-				self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				trigger_error(sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
+				self::_putDebug(sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				self::_errorLog(sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
 				return FALSE;
 				break;
 		}
