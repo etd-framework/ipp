@@ -1,6 +1,5 @@
 <?php
-/* @(#) $Header: /sources/phpprintipp/phpprintipp/php_classes/http_class.php,v 1.7 2010/08/22 15:45:17 harding Exp $ */
-/* vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker: */
+
 /* ====================================================================
  * GNU Lesser General Public License
  * Version 2.1, February 1999
@@ -27,6 +26,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * $Id: http_class.php,v 1.7 2010/08/22 15:45:17 harding Exp $
  */
+
 /**
  *  This class is intended to implement a subset of Hyper Text Transfer Protocol
  *  (HTTP/1.1) on client side  (currently: POST operation), with file streaming
@@ -59,73 +59,15 @@
  * - httpException extends Exception
  * - http_class
  */
-/***********************
- *
- * httpException class
- *
- ************************/
-class httpException extends Exception
-{
-	protected $errno;
 
-	public function __construct($msg, $errno = null)
-	{
-		parent::__construct($msg);
-		$this->errno = $errno;
-	}
-
-	public function getErrorFormatted()
-	{
-		return sprintf("[http_class]: %s -- " . _(" file %s, line %s"),
-			$this->getMessage(), $this->getFile(), $this->getLine());
-	}
-
-	public function getErrno()
-	{
-		return $this->errno;
-	}
-}
-
-function error2string($value)
-{
-	$level_names = array(
-		E_ERROR => 'E_ERROR',
-		E_WARNING => 'E_WARNING',
-		E_PARSE => 'E_PARSE',
-		E_NOTICE => 'E_NOTICE',
-		E_CORE_ERROR => 'E_CORE_ERROR',
-		E_CORE_WARNING => 'E_CORE_WARNING',
-		E_COMPILE_ERROR => 'E_COMPILE_ERROR',
-		E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-		E_USER_ERROR => 'E_USER_ERROR',
-		E_USER_WARNING => 'E_USER_WARNING',
-		E_USER_NOTICE => 'E_USER_NOTICE'
-	);
-	if (defined('E_STRICT')) {
-		$level_names[E_STRICT] = 'E_STRICT';
-	}
-	$levels = array();
-	if (($value & E_ALL) == E_ALL)
-	{
-		$levels[] = 'E_ALL';
-		$value &= ~E_ALL;
-	}
-	foreach ($level_names as $level => $name)
-	{
-		if (($value & $level) == $level)
-		{
-			$levels[] = $name;
-		}
-	}
-	return implode(' | ', $levels);
-}
+namespace PHP_IPP\HTTP;
 
 /***********************
  *
- * class http_class
+ * class HTTPClient
  *
  ************************/
-class http_class
+class HTTPClient
 {
 	// variables declaration
 	public $debug;
@@ -331,10 +273,10 @@ class http_class
 			$trace .= sprintf("in [file: '%s'][function: '%s'][line: %s];\n", $trace['file'], $trace['function'], $trace['line']);
 		}
 		$msg = sprintf('%s\n%s: [errno: %s]: %s',
-			$trace, error2string($level), $errno, $msg);
+			$trace, $this->error2string($level), $errno, $msg);
 		if ($this->with_exceptions)
 		{
-			throw new httpException ($msg, $errno);
+			throw new HTTPClientException ($msg, $errno);
 		}
 		else
 		{
@@ -627,6 +569,40 @@ class http_class
 		$this->nc++;
 		return $auth_scheme;
 	}
+        
+        private function error2string($value)
+        {
+                $level_names = array(
+                        E_ERROR => 'E_ERROR',
+                        E_WARNING => 'E_WARNING',
+                        E_PARSE => 'E_PARSE',
+                        E_NOTICE => 'E_NOTICE',
+                        E_CORE_ERROR => 'E_CORE_ERROR',
+                        E_CORE_WARNING => 'E_CORE_WARNING',
+                        E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+                        E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+                        E_USER_ERROR => 'E_USER_ERROR',
+                        E_USER_WARNING => 'E_USER_WARNING',
+                        E_USER_NOTICE => 'E_USER_NOTICE'
+                );
+                if (defined('E_STRICT')) {
+                        $level_names[E_STRICT] = 'E_STRICT';
+                }
+                $levels = array();
+                if (($value & E_ALL) == E_ALL)
+                {
+                        $levels[] = 'E_ALL';
+                        $value &= ~E_ALL;
+                }
+                foreach ($level_names as $level => $name)
+                {
+                        if (($value & $level) == $level)
+                        {
+                                $levels[] = $name;
+                        }
+                }
+                return implode(' | ', $levels);
+        }
 }
 
 ;

@@ -105,13 +105,13 @@ try
   {
     printf(_("Job status: %s\n"), $ipp->printJob()); // Print job, display job status 
   }
-  catch (httpException $e)
+  catch (HTTPClientException $e)
   {
     printf("%s\nerrno: %s\n",$e->getMessage(),$e->getErrno());
     trigger_error("I prefer to quit", E_USER_ERROR);
   }
 }
-catch (ippException $e)
+catch (IPPException $e)
 {
   printf("%s\nerrno: %s\n",$e->getMessage(),$e->getErrno());
   trigger_error("I prefer to quit", E_USER_ERROR);

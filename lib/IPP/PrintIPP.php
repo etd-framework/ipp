@@ -36,11 +36,12 @@
 		- RFC 3380
 		- RFC 3382
 */
+
 /*
     TODO: beta tests on other servers than Cups
 */
 
-require_once("BasicIPP.php");
+namespace PHP_IPP\IPP;
 
 class PrintIPP extends BasicIPP
 {
@@ -124,7 +125,7 @@ class PrintIPP extends BasicIPP
 				self::_errorLog(sprintf("printing job: ", $this->last_job) . $this->serveroutput->status, 1);
 				if ($this->with_exceptions)
 				{
-					throw new ippException(sprintf("job status: %s",
+					throw new IPPException(sprintf("job status: %s",
 						$this->serveroutput->status));
 				}
 			}

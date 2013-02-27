@@ -1,6 +1,6 @@
 <?php
 
-/* @(#) $Header: /sources/phpprintipp/phpprintipp/php_classes/BasicIPP.php,v 1.7 2012/03/01 17:21:04 harding Exp $
+/*
  *
  * Class BasicIPP - Send Basic IPP requests, Get and parses IPP Responses.
  *
@@ -25,6 +25,7 @@
  *   Thomas Harding, 56 rue de la bourie rouge, 45 000 ORLEANS -- FRANCE
  *
  */
+
 /*
 
    This class is intended to implement Internet Printing Protocol on client side.
@@ -36,30 +37,10 @@
    - RFC 3382
  */
 
-require_once ("http_class.php");
+namespace PHP_IPP\IPP;
 
-class ippException extends Exception
-{
-	protected $errno;
-
-	public function __construct($msg, $errno = null)
-	{
-		parent::__construct($msg);
-		$this->errno = $errno;
-	}
-
-	public function getErrorFormatted()
-	{
-		$return = sprintf("[ipp]: %s -- " . _(" file %s, line %s"),
-			$this->getMessage(), $this->getFile(), $this->getLine());
-		return $return;
-	}
-
-	public function getErrno()
-	{
-		return $this->errno;
-	}
-}
+use PHP_IPP\HTTP\HTTPClient;
+use PHP_IPP\HTTP\HTTPClientException;
 
 class BasicIPP
 {
@@ -621,7 +602,7 @@ class BasicIPP
 	 * @param string $destination_type
 	 * @param int $level
 	 *
-	 * @throws ippException
+	 * @throws IPPException
 	 */
 	public function setLog($log_destination, $destination_type = 'file', $level = 2)
 	{
@@ -778,7 +759,7 @@ class BasicIPP
 		self::_putDebug(_("Processing HTTP request"), 2);
 		$this->serveroutput->headers = array();
 		$this->serveroutput->body = "";
-		$http = new http_class;
+		$http = new HTTPClient;
 		if (!$this->unix) {
 			$http->host = $this->host;
 		}
@@ -837,9 +818,9 @@ class BasicIPP
 			{
 				$success = $http->Open($arguments);
 			}
-			catch (httpException $e)
+			catch (HTTPClientException $e)
 			{
-				throw new ippException(
+				throw new IPPException(
 					sprintf("http error: %s", $e->getMessage()),
 					$e->getErrno());
 			}
@@ -1646,7 +1627,7 @@ class BasicIPP
 
 			if ($this->with_exceptions)
 			{
-				throw new ippException($errmsg);
+				throw new IPPException($errmsg);
 			}
 			else
 			{

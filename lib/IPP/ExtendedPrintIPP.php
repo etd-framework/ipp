@@ -41,7 +41,7 @@
         - ...
 */
 
-require_once("PrintIPP.php");
+namespace PHP_IPP\IPP;
 
 class ExtendedPrintIPP extends PrintIPP
 {

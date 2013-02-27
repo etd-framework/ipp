@@ -312,14 +312,14 @@ try
       }
     }
   }
-  catch (httpException $e)
+  catch (HTTPClientException $e)
   {
     if ($unlink) unlink($data);
     printf("%s\nerrno: %s\n",$e->getMessage(),$e->getErrno());
     trigger_error("I prefer to quit", E_USER_ERROR);
   }
 }
-catch (ippException $e)
+catch (IPPException $e)
 {
   if ($unlink) unlink($data);
   printf("%s\nerrno: %s\n",$e->getMessage(),$e->getErrno());

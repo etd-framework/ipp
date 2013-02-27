@@ -36,7 +36,7 @@
 		- CUPS-IPP-1.1
 */
 
-require_once("ExtendedPrintIPP.php");
+namespace PHP_IPP\IPP;
 
 class CupsPrintIPP extends ExtendedPrintIPP
 {
