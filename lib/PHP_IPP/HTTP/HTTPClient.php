@@ -157,7 +157,7 @@ class HTTPClient
 			$url = preg_split("#/#", preg_replace("#^/{1,}#", '', $url), 2);
 			$url = $url[0];
 			$port = $this->port;
-			$error = sprintf(_("Cannot resolve url: %s"), $url);
+			$error = sprintf(("Cannot resolve url: %s"), $url);
 			$ip = gethostbyname($url);
 			$ip = @gethostbyaddr($ip);
 			if (!$ip)
@@ -220,7 +220,7 @@ class HTTPClient
 
 			default:
 				$error =
-					sprintf(_("need '%s' authentication mechanism, but have not"),
+					sprintf(("need '%s' authentication mechanism, but have not"),
 						$authtype[0]);
 				return $this->_HttpError($error, E_USER_WARNING);
 				break;
@@ -302,7 +302,7 @@ class HTTPClient
 		$this->reply_body = "";
 		if (!$this->connected)
 		{
-			return _HttpError(_("not connected"), E_USER_WARNING);
+			return _HttpError(("not connected"), E_USER_WARNING);
 		}
 		$this->arguments = $arguments;
 		$content_length = 0;
@@ -324,7 +324,7 @@ class HTTPClient
 				{
 					$length = 0;
 					return
-						_HttpError(sprintf(_("%s: file is not readable"), $value),
+						_HttpError(sprintf(("%s: file is not readable"), $value),
 							E_USER_WARNING);
 				}
 			}
@@ -333,12 +333,12 @@ class HTTPClient
 				$length = 0;
 				return
 					_HttpError(sprintf
-						(_("%s: not a valid argument for content"), $type),
+						(("%s: not a valid argument for content"), $type),
 						E_USER_WARNING);
 			}
 			$content_length += $length;
 		}
-		$this->request_body = sprintf(_("%s Bytes"), $content_length);
+		$this->request_body = sprintf(("%s Bytes"), $content_length);
 		$this->headers["Content-Length"] = $content_length;
 		$this->arguments["Headers"] =
 			array_merge($this->headers, $this->arguments["Headers"]);
@@ -346,7 +346,7 @@ class HTTPClient
 		{
 			return
 				_HttpError(sprintf
-				(_("%s: method not implemented"),
+				(("%s: method not implemented"),
 					$arguments["RequestMethod"]), E_USER_WARNING);
 		}
 		$string =
@@ -354,7 +354,7 @@ class HTTPClient
 		$this->request_headers[$string] = '';
 		if (!$this->_streamString($string))
 		{
-			return _HttpError(_("Error while puts POST operation"),
+			return _HttpError(("Error while puts POST operation"),
 				E_USER_WARNING);
 		}
 		foreach ($this->arguments["Headers"] as $header => $value)
@@ -363,14 +363,14 @@ class HTTPClient
 			$this->request_headers[$header] = $value;
 			if (!$this->_streamString($string))
 			{
-				return _HttpError(_("Error while puts HTTP headers"),
+				return _HttpError(("Error while puts HTTP headers"),
 					E_USER_WARNING);
 			}
 		}
 		$string = "\r\n";
 		if (!$this->_streamString($string))
 		{
-			return _HttpError(_("Error while ends HTTP headers"),
+			return _HttpError(("Error while ends HTTP headers"),
 				E_USER_WARNING);
 		}
 		foreach ($this->arguments["BodyStream"] as $argument)
@@ -385,7 +385,7 @@ class HTTPClient
 					$string = substr($value, $streamed_length, $this->window_size);
 					if (!$this->_streamString($string))
 					{
-						return _HttpError(_("error while sending body data"),
+						return _HttpError(("error while sending body data"),
 							E_USER_WARNING);
 					}
 					$streamed_length += $this->window_size;
@@ -402,12 +402,12 @@ class HTTPClient
 							"string"
 						)
 						{
-							return _HttpError(_("cannot read file to upload"),
+							return _HttpError(("cannot read file to upload"),
 								E_USER_WARNING);
 						}
 						if (!$this->_streamString($block))
 						{
-							return _HttpError(_("error while sending body data"),
+							return _HttpError(("error while sending body data"),
 								E_USER_WARNING);
 						}
 					}
@@ -511,7 +511,7 @@ class HTTPClient
 
 				default:
 					return _HttpError(
-						sprintf(_("digest Authorization: algorithm '%s' not implemented"),
+						sprintf(("digest Authorization: algorithm '%s' not implemented"),
 							$algorithm),
 						E_USER_WARNING);
 					return false;
@@ -531,7 +531,7 @@ class HTTPClient
 			else
 			{
 				self::_HttpError(
-					sprintf(_("digest Authorization: algorithm '%s' not implemented"),
+					sprintf(("digest Authorization: algorithm '%s' not implemented"),
 						$qop),
 					E_USER_WARNING);
 				return false;

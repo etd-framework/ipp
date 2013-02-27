@@ -133,8 +133,8 @@ class ExtendedPrintIPP extends PrintIPP
 			}
 			else
 			{
-				trigger_error(_("purgeJobs: Printer URI is not set: die"), E_USER_WARNING);
-				self::_putDebug(_("purgeJobs: Printer URI is not set: die\n"));
+				trigger_error(("purgeJobs: Printer URI is not set: die"), E_USER_WARNING);
+				self::_putDebug(("purgeJobs: Printer URI is not set: die\n"));
 				self::_errorLog("purgeJobs: Printer URI is not set, die", 2);
 				return FALSE;
 			}
@@ -170,9 +170,9 @@ class ExtendedPrintIPP extends PrintIPP
 			. chr(0x01)
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 
-		self::_putDebug(sprintf(_("purging jobs of %s\n"), $this->printer_uri));
+		self::_putDebug(sprintf(("purging jobs of %s\n"), $this->printer_uri));
 
 		$this->output = $this->stringjob;
 
@@ -192,12 +192,12 @@ class ExtendedPrintIPP extends PrintIPP
 
 			if ($this->serveroutput->status == "successfull-ok")
 			{
-				self::_errorLog(sprintf(_("purging jobs of %s: "), $this->printer_uri)
+				self::_errorLog(sprintf(("purging jobs of %s: "), $this->printer_uri)
 					. $this->serveroutput->status, 3);
 			}
 			else
 			{
-				self::_errorLog(sprintf(_("purging jobs of %s: "), $this->printer_uri)
+				self::_errorLog(sprintf(("purging jobs of %s: "), $this->printer_uri)
 					. $this->serveroutput->status, 1);
 			}
 
@@ -207,7 +207,7 @@ class ExtendedPrintIPP extends PrintIPP
 		$this->status = array_merge($this->status, array("OPERATION FAILED"));
 		self::_errorLog(date("Y-m-d H:i:s : ")
 			. basename($_SERVER['PHP_SELF'])
-			. sprintf(_("purging jobs of %s : OPERATION FAILED"),
+			. sprintf(("purging jobs of %s : OPERATION FAILED"),
 				$this->printer_uri), 3);
 
 		return false;
@@ -232,8 +232,8 @@ class ExtendedPrintIPP extends PrintIPP
 			}
 			else
 			{
-				trigger_error(_("createJob: Printer URI is not set: die"), E_USER_WARNING);
-				self::_putDebug(_("createJob: Printer URI is not set: die\n"));
+				trigger_error(("createJob: Printer URI is not set: die"), E_USER_WARNING);
+				self::_putDebug(("createJob: Printer URI is not set: die\n"));
 				self::_errorLog("createJob: Printer URI is not set, die", 2);
 				return FALSE;
 			}
@@ -326,9 +326,9 @@ class ExtendedPrintIPP extends PrintIPP
 
 		unset ($this->meta->copies, $this->meta->sides, $this->meta->page_ranges);
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 
-		self::_putDebug(sprintf(_("creating job %s, printer %s\n"), $this->last_job, $this->printer_uri));
+		self::_putDebug(sprintf(("creating job %s, printer %s\n"), $this->last_job, $this->printer_uri));
 
 		$this->output = $this->stringjob;
 
@@ -357,7 +357,7 @@ class ExtendedPrintIPP extends PrintIPP
 
 			if ($this->serveroutput->status == "successfull-ok")
 			{
-				self::_errorLog(sprintf(_("Create job: job %s"), $this->last_job)
+				self::_errorLog(sprintf(("Create job: job %s"), $this->last_job)
 					. $this->serveroutput->status, 3);
 			}
 			else
@@ -365,7 +365,7 @@ class ExtendedPrintIPP extends PrintIPP
 
 				$this->jobs = array_merge($this->jobs, array(""));
 				$this->jobs_uri = array_merge($this->jobs_uri, array(""));
-				self::_errorLog(sprintf(_("Create-Job: %s"), $this->serveroutput->status), 1);
+				self::_errorLog(sprintf(("Create-Job: %s"), $this->serveroutput->status), 1);
 			}
 			return $this->serveroutput->status;
 		}
@@ -373,7 +373,7 @@ class ExtendedPrintIPP extends PrintIPP
 		$this->status = array_merge($this->status, array("OPERATION FAILED"));
 		self::_errorLog(date("Y-m-d H:i:s : ")
 			. basename($_SERVER['PHP_SELF'])
-			. sprintf(_("Creating job on %s : OPERATION FAILED"),
+			. sprintf(("Creating job on %s : OPERATION FAILED"),
 				$this->printer_uri), 3);
 
 		$this->jobs = array_merge($this->jobs, array(""));
@@ -392,7 +392,7 @@ class ExtendedPrintIPP extends PrintIPP
 
 		if (is_readable($this->data))
 		{
-			self::_putDebug(_("sending Document\n"));
+			self::_putDebug(("sending Document\n"));
 
 			$this->output = $this->stringjob;
 
@@ -412,7 +412,7 @@ class ExtendedPrintIPP extends PrintIPP
 		}
 		else
 		{
-			self::_putDebug(_("sending DATA as document\n"));
+			self::_putDebug(("sending DATA as document\n"));
 
 			$this->output = $this->stringjob;
 			$this->output .= $this->datahead;
@@ -475,7 +475,7 @@ class ExtendedPrintIPP extends PrintIPP
 			return FALSE;
 		}
 
-		self::_putDebug(_("sending URI $uri\n"));
+		self::_putDebug(("sending URI $uri\n"));
 
 		$this->output = $this->stringjob;
 
@@ -549,8 +549,8 @@ class ExtendedPrintIPP extends PrintIPP
 			}
 			else
 			{
-				trigger_error(_("pausePrinter: Printer URI is not set: die"), E_USER_WARNING);
-				self::_putDebug(_("pausePrinter: Printer URI is not set: die\n"));
+				trigger_error(("pausePrinter: Printer URI is not set: die"), E_USER_WARNING);
+				self::_putDebug(("pausePrinter: Printer URI is not set: die\n"));
 				self::_errorLog("pausePrinter: Printer URI is not set, die", 2);
 				return FALSE;
 			}
@@ -586,9 +586,9 @@ class ExtendedPrintIPP extends PrintIPP
 									 . chr(0x01) */
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 
-		self::_putDebug(sprintf(_("pause printer %s\n"), $this->printer_uri));
+		self::_putDebug(sprintf(("pause printer %s\n"), $this->printer_uri));
 
 		$this->output = $this->stringjob;
 
@@ -608,12 +608,12 @@ class ExtendedPrintIPP extends PrintIPP
 
 			if ($this->serveroutput->status == "successfull-ok")
 			{
-				self::_errorLog(sprintf(_("Pause printer %s: "), $this->printer_uri)
+				self::_errorLog(sprintf(("Pause printer %s: "), $this->printer_uri)
 					. $this->serveroutput->status, 3);
 			}
 			else
 			{
-				self::_errorLog(sprintf(_("pause printer %s: "), $this->printer_uri)
+				self::_errorLog(sprintf(("pause printer %s: "), $this->printer_uri)
 					. $this->serveroutput->status, 1);
 			}
 
@@ -623,7 +623,7 @@ class ExtendedPrintIPP extends PrintIPP
 		$this->status = array_merge($this->status, array("OPERATION FAILED"));
 		self::_errorLog(date("Y-m-d H:i:s : ")
 			. basename($_SERVER['PHP_SELF'])
-			. sprintf(_("pause printer %s : OPERATION FAILED"),
+			. sprintf(("pause printer %s : OPERATION FAILED"),
 				$this->printer_uri), 3);
 
 		return false;
@@ -651,8 +651,8 @@ class ExtendedPrintIPP extends PrintIPP
 			}
 			else
 			{
-				trigger_error(_("resumePrinter: Printer URI is not set: die"), E_USER_WARNING);
-				self::_putDebug(_("resumePrinter: Printer URI is not set: die\n"));
+				trigger_error(("resumePrinter: Printer URI is not set: die"), E_USER_WARNING);
+				self::_putDebug(("resumePrinter: Printer URI is not set: die\n"));
 				self::_errorLog(" Printer URI is not set, die", 2);
 				return FALSE;
 			}
@@ -683,9 +683,9 @@ class ExtendedPrintIPP extends PrintIPP
 			. $this->meta->username
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 
-		self::_putDebug(sprintf(_("resume printer %s\n"), $this->printer_uri));
+		self::_putDebug(sprintf(("resume printer %s\n"), $this->printer_uri));
 
 		$this->output = $this->stringjob;
 
@@ -705,12 +705,12 @@ class ExtendedPrintIPP extends PrintIPP
 
 			if ($this->serveroutput->status == "successfull-ok")
 			{
-				self::_errorLog(sprintf(_("resume printer %s: "), $this->printer_uri)
+				self::_errorLog(sprintf(("resume printer %s: "), $this->printer_uri)
 					. $this->serveroutput->status, 3);
 			}
 			else
 			{
-				self::_errorLog(sprintf(_("resume printer %s: "), $this->printer_uri)
+				self::_errorLog(sprintf(("resume printer %s: "), $this->printer_uri)
 					. $this->serveroutput->status, 1);
 			}
 
@@ -720,7 +720,7 @@ class ExtendedPrintIPP extends PrintIPP
 		$this->status = array_merge($this->status, array("OPERATION FAILED"));
 		self::_errorLog(date("Y-m-d H:i:s : ")
 			. basename($_SERVER['PHP_SELF'])
-			. sprintf(_("resume printer %s : OPERATION FAILED"),
+			. sprintf(("resume printer %s : OPERATION FAILED"),
 				$this->printer_uri), 3);
 
 		return false;
@@ -785,9 +785,9 @@ class ExtendedPrintIPP extends PrintIPP
 			. $this->meta->job_hold_until
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 
-		self::_putDebug(sprintf(_("hold job %s until %s\n"), $job_uri, $until));
+		self::_putDebug(sprintf(("hold job %s until %s\n"), $job_uri, $until));
 
 		$this->output = $this->stringjob;
 
@@ -806,12 +806,12 @@ class ExtendedPrintIPP extends PrintIPP
 
 			if ($this->serveroutput->status == "successfull-ok")
 			{
-				self::_errorLog(sprintf(_("hold job %s until %s: "), $job_uri, $until)
+				self::_errorLog(sprintf(("hold job %s until %s: "), $job_uri, $until)
 					. $this->serveroutput->status, 3);
 			}
 			else
 			{
-				self::_errorLog(sprintf(_("hold job %s until %s: "), $job_uri, $until)
+				self::_errorLog(sprintf(("hold job %s until %s: "), $job_uri, $until)
 					. $this->serveroutput->status, 1);
 			}
 
@@ -821,7 +821,7 @@ class ExtendedPrintIPP extends PrintIPP
 		$this->status = array_merge($this->status, array("OPERATION FAILED"));
 		self::_errorLog(date("Y-m-d H:i:s : ")
 			. basename($_SERVER['PHP_SELF'])
-			. sprintf(_("hold job %s until %s : OPERATION FAILED"),
+			. sprintf(("hold job %s until %s : OPERATION FAILED"),
 				$job_uri, $until), 3);
 
 		return false;
@@ -869,9 +869,9 @@ class ExtendedPrintIPP extends PrintIPP
 			. $this->meta->message
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 
-		self::_putDebug(sprintf(_("release job %s\n"), $job_uri));
+		self::_putDebug(sprintf(("release job %s\n"), $job_uri));
 
 		$this->output = $this->stringjob;
 
@@ -890,12 +890,12 @@ class ExtendedPrintIPP extends PrintIPP
 
 			if ($this->serveroutput->status == "successfull-ok")
 			{
-				self::_errorLog(sprintf(_("release job %s: "), $job_uri)
+				self::_errorLog(sprintf(("release job %s: "), $job_uri)
 					. $this->serveroutput->status, 3);
 			}
 			else
 			{
-				self::_errorLog(sprintf(_("release job %s: "), $job_uri)
+				self::_errorLog(sprintf(("release job %s: "), $job_uri)
 					. $this->serveroutput->status, 1);
 			}
 
@@ -905,7 +905,7 @@ class ExtendedPrintIPP extends PrintIPP
 		$this->status = array_merge($this->status, array("OPERATION FAILED"));
 		self::_errorLog(date("Y-m-d H:i:s : ")
 			. basename($_SERVER['PHP_SELF'])
-			. sprintf(_("release job %s: OPERATION FAILED"),
+			. sprintf(("release job %s: OPERATION FAILED"),
 				$job_uri), 3);
 
 		return false;
@@ -959,9 +959,9 @@ class ExtendedPrintIPP extends PrintIPP
 			. $jobattributes // job-hold-until is set by setAttribute($attribute,$value)
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 
-		self::_putDebug(sprintf(_("release job %s\n"), $job_uri));
+		self::_putDebug(sprintf(("release job %s\n"), $job_uri));
 
 		$this->output = $this->stringjob;
 
@@ -981,12 +981,12 @@ class ExtendedPrintIPP extends PrintIPP
 
 			if ($this->serveroutput->status == "successfull-ok")
 			{
-				self::_errorLog(sprintf(_("release job %s: "), $job_uri)
+				self::_errorLog(sprintf(("release job %s: "), $job_uri)
 					. $this->serveroutput->status, 3);
 			}
 			else
 			{
-				self::_errorLog(sprintf(_("release job %s: "), $job_uri)
+				self::_errorLog(sprintf(("release job %s: "), $job_uri)
 					. $this->serveroutput->status, 1);
 			}
 
@@ -996,7 +996,7 @@ class ExtendedPrintIPP extends PrintIPP
 		$this->status = array_merge($this->status, array("OPERATION FAILED"));
 		self::_errorLog(date("Y-m-d H:i:s : ")
 			. basename($_SERVER['PHP_SELF'])
-			. sprintf(_("release job %s: OPERATION FAILED"),
+			. sprintf(("release job %s: OPERATION FAILED"),
 				$job_uri), 3);
 
 		return false;
@@ -1079,9 +1079,9 @@ class ExtendedPrintIPP extends PrintIPP
 			. $this->meta->deleted_attributes
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 
-		self::_putDebug(sprintf(_("set job attributes for job %s\n"), $job_uri));
+		self::_putDebug(sprintf(("set job attributes for job %s\n"), $job_uri));
 
 		$this->output = $this->stringjob;
 
@@ -1100,12 +1100,12 @@ class ExtendedPrintIPP extends PrintIPP
 
 			if ($this->serveroutput->status == "successfull-ok")
 			{
-				self::_errorLog(sprintf(_("set job attributes for job %s: "), $job_uri)
+				self::_errorLog(sprintf(("set job attributes for job %s: "), $job_uri)
 					. $this->serveroutput->status, 3);
 			}
 			else
 			{
-				self::_errorLog(sprintf(_("set job attributes for job %s: "), $job_uri)
+				self::_errorLog(sprintf(("set job attributes for job %s: "), $job_uri)
 					. $this->serveroutput->status, 1);
 			}
 			$this->last_job = $job_uri;
@@ -1116,7 +1116,7 @@ class ExtendedPrintIPP extends PrintIPP
 		$this->status = array_merge($this->status, array("OPERATION FAILED"));
 		self::_errorLog(date("Y-m-d H:i:s : ")
 			. basename($_SERVER['PHP_SELF'])
-			. sprintf(_("set job attributes for job %s: OPERATION FAILED"),
+			. sprintf(("set job attributes for job %s: OPERATION FAILED"),
 				$job_uri), 3);
 
 		return false;
@@ -1225,9 +1225,9 @@ class ExtendedPrintIPP extends PrintIPP
 			. $this->meta->deleted_attributes
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 
-		self::_putDebug(sprintf(_("set printer attributes for job %s\n"), $this->printer_uri));
+		self::_putDebug(sprintf(("set printer attributes for job %s\n"), $this->printer_uri));
 
 		$this->output = $this->stringjob;
 
@@ -1246,12 +1246,12 @@ class ExtendedPrintIPP extends PrintIPP
 
 			if ($this->serveroutput->status == "successfull-ok")
 			{
-				self::_errorLog(sprintf(_("set printer attributes for printer %s: "), $this->printer_uri)
+				self::_errorLog(sprintf(("set printer attributes for printer %s: "), $this->printer_uri)
 					. $this->serveroutput->status, 3);
 			}
 			else
 			{
-				self::_errorLog(sprintf(_("set printer attributes for printer %s: "), $this->printer_uri)
+				self::_errorLog(sprintf(("set printer attributes for printer %s: "), $this->printer_uri)
 					. $this->serveroutput->status, 1);
 			}
 
@@ -1261,7 +1261,7 @@ class ExtendedPrintIPP extends PrintIPP
 		$this->status = array_merge($this->status, array("OPERATION FAILED"));
 		self::_errorLog(date("Y-m-d H:i:s : ")
 			. basename($_SERVER['PHP_SELF'])
-			. sprintf(_("set printer attributes for printer %s: OPERATION FAILED"),
+			. sprintf(("set printer attributes for printer %s: OPERATION FAILED"),
 				$this->printer_uri), 1);
 
 		return false;
@@ -1286,8 +1286,8 @@ class ExtendedPrintIPP extends PrintIPP
 
 		if (!isset($this->setup->document_uri))
 		{
-			trigger_error(_("_stringUri: Document URI is not set: die"), E_USER_WARNING);
-			self::_putDebug(_("_stringUri: Document URI is not set: die\n"));
+			trigger_error(("_stringUri: Document URI is not set: die"), E_USER_WARNING);
+			self::_putDebug(("_stringUri: Document URI is not set: die\n"));
 			self::_errorLog("Document URI is not set, die", 2);
 			return FALSE;
 		}
@@ -1306,8 +1306,8 @@ class ExtendedPrintIPP extends PrintIPP
 			}
 			else
 			{
-				trigger_error(_("_stringUri: Printer URI is not set: die"), E_USER_WARNING);
-				self::_putDebug(_("_stringUri: Printer URI is not set: die\n"));
+				trigger_error(("_stringUri: Printer URI is not set: die"), E_USER_WARNING);
+				self::_putDebug(("_stringUri: Printer URI is not set: die\n"));
 				self::_errorLog("_stringUri: Printer URI is not set, die", 2);
 				return FALSE;
 			}
@@ -1323,8 +1323,8 @@ class ExtendedPrintIPP extends PrintIPP
 		}
 		if (!isset($this->setup->uri))
 		{
-			trigger_error(_("_stringUri: Printer URI is not set: die"), E_USER_WARNING);
-			self::_putDebug(_("_stringUri: Printer URI is not set: die\n"));
+			trigger_error(("_stringUri: Printer URI is not set: die"), E_USER_WARNING);
+			self::_putDebug(("_stringUri: Printer URI is not set: die\n"));
 			self::_errorLog("Printer URI is not set, die", 2);
 			return FALSE;
 		}
@@ -1415,7 +1415,7 @@ class ExtendedPrintIPP extends PrintIPP
 			. $jobattributes
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 		return TRUE;
 	}
 
@@ -1452,8 +1452,8 @@ class ExtendedPrintIPP extends PrintIPP
 			}
 			else
 			{
-				trigger_error(_("_stringJob: Printer URI is not set: die"), E_USER_WARNING);
-				self::_putDebug(_("_stringJob: Printer URI is not set: die\n"));
+				trigger_error(("_stringJob: Printer URI is not set: die"), E_USER_WARNING);
+				self::_putDebug(("_stringJob: Printer URI is not set: die\n"));
 				self::_errorLog(" Printer URI is not set, die", 2);
 				return FALSE;
 			}
@@ -1528,7 +1528,7 @@ class ExtendedPrintIPP extends PrintIPP
 			. $is_last
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 		return TRUE;
 	}
 
@@ -1539,8 +1539,8 @@ class ExtendedPrintIPP extends PrintIPP
 
 		if (!isset($this->setup->document_uri))
 		{
-			trigger_error(_("_stringUri: Document URI is not set: die"), E_USER_WARNING);
-			self::_putDebug(_("_stringUri: Document URI is not set: die\n"));
+			trigger_error(("_stringUri: Document URI is not set: die"), E_USER_WARNING);
+			self::_putDebug(("_stringUri: Document URI is not set: die\n"));
 			self::_errorLog("Document URI is not set, die", 2);
 			return FALSE;
 		}
@@ -1577,8 +1577,8 @@ class ExtendedPrintIPP extends PrintIPP
 			}
 			else
 			{
-				trigger_error(_("_stringJob: Printer URI is not set: die"), E_USER_WARNING);
-				self::_putDebug(_("_stringJob: Printer URI is not set: die\n"));
+				trigger_error(("_stringJob: Printer URI is not set: die"), E_USER_WARNING);
+				self::_putDebug(("_stringJob: Printer URI is not set: die\n"));
 				self::_errorLog(" Printer URI is not set, die", 2);
 				return FALSE;
 			}
@@ -1650,7 +1650,7 @@ class ExtendedPrintIPP extends PrintIPP
 			. $is_last
 			. chr(0x03); // end-of-attributes | end-of-attributes-tag
 
-		self::_putDebug(sprintf(_("String sent to the server is:\n%s\n"), $this->stringjob));
+		self::_putDebug(sprintf(("String sent to the server is:\n%s\n"), $this->stringjob));
 		return TRUE;
 	}
 }
