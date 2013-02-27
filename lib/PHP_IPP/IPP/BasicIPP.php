@@ -170,7 +170,7 @@ class BasicIPP
 			. "printer-uri" // printer-uri | name
 			. $length . $uri;
 		$this->printer_uri = $uri;
-		self::_putDebug(\sprintf(("Printer URI: %s"), $uri), 2);
+		self::_putDebug(sprintf(_("Printer URI: %s"), $uri), 2);
 		$this->setup->uri = 1;
 	}
 
@@ -239,7 +239,7 @@ class BasicIPP
 			. "attributes-charset" // attributes-charset | name
 			. self::_giveMeStringLength($charset) // value-length
 			. $charset; // value
-		self::_putDebug(\sprintf(("Charset: %s"), $charset), 2);
+		self::_putDebug(sprintf(_("Charset: %s"), $charset), 2);
 		$this->setup->charset = 1;
 	}
 
@@ -251,7 +251,7 @@ class BasicIPP
 			. "attributes-natural-language" //attributes-natural-language
 			. self::_giveMeStringLength($language) // value-length
 			. $language; // value
-		self::_putDebug(\sprintf(("Language: %s"), $language), 2);
+		self::_putDebug(sprintf(_("Language: %s"), $language), 2);
 		$this->setup->language = 1;
 	}
 
@@ -260,7 +260,7 @@ class BasicIPP
 		self::setBinary();
 		$length = chr(strlen($mime_media_type));
 		while (strlen($length) < 2) $length = chr(0x00) . $length;
-		self::_putDebug(\sprintf(("mime type: %s"), $mime_media_type), 2);
+		self::_putDebug(sprintf(_("mime type: %s"), $mime_media_type), 2);
 		$this->meta->mime_media_type = chr(0x49) // document-format tag
 			. self::_giveMeStringLength('document-format') . 'document-format' //
 			. self::_giveMeStringLength($mime_media_type) . $mime_media_type; // value
@@ -288,7 +288,7 @@ class BasicIPP
 			. "copies" // copies    |             name
 			. self::_giveMeStringLength($copies) // value-length
 			. $copies;
-		self::_putDebug(\sprintf(("Copies: %s"), $nbrcopies), 2);
+		self::_putDebug(sprintf(_("Copies: %s"), $nbrcopies), 2);
 		$this->setup->copies = 1;
 	}
 
@@ -302,7 +302,7 @@ class BasicIPP
 		$length = strlen($document_name);
 		$length = chr($length);
 		while (strlen($length) < 2) $length = chr(0x00) . $length;
-		self::_putDebug(\sprintf(("document name: %s"), $document_name), 2);
+		self::_putDebug(sprintf(_("document name: %s"), $document_name), 2);
 		$this->meta->document_name = chr(0x41) // textWithoutLanguage tag
 			. chr(0x00) . chr(0x0d) // name-length
 			. "document-name" // mimeMediaType
@@ -333,7 +333,7 @@ class BasicIPP
 			. "job-name" //  job-name || name
 			. self::_giveMeStringLength($jobname) // value-length
 			. $jobname; // value
-		self::_putDebug(\sprintf(("Job name: %s"), $jobname), 2);
+		self::_putDebug(sprintf(_("Job name: %s"), $jobname), 2);
 		$this->setup->jobname = 1;
 	}
 
@@ -361,7 +361,7 @@ class BasicIPP
 			. "requesting-user-name"
 			. self::_giveMeStringLength($username) // value-length
 			. $username;
-		self::_putDebug(\sprintf(("Username: %s"), $username), 2);
+		self::_putDebug(sprintf(_("Username: %s"), $username), 2);
 		$this->setup->username = 1;
 	}
 
@@ -406,7 +406,7 @@ class BasicIPP
 			. "sides" // sides |             name
 			. self::_giveMeStringLength($sides) //               value-length
 			. $sides; // one-sided |          value
-		self::_putDebug(\sprintf(("Sides value set to %s"), $sides), 2);
+		self::_putDebug(sprintf(_("Sides value set to %s"), $sides), 2);
 	}
 
 	public function setFidelity()
@@ -448,7 +448,7 @@ class BasicIPP
 				. "message"
 				. self::_giveMeStringLength(substr($message, 0, 127))
 				. substr($message, 0, 127);
-		self::_putDebug(\sprintf(('Setting message to "%s"'), $message), 2);
+		self::_putDebug(sprintf(_('Setting message to "%s"'), $message), 2);
 	}
 
 	public function setPageRanges($page_ranges)
@@ -538,13 +538,13 @@ class BasicIPP
 		else
 		{
 			trigger_error(
-				\sprintf(('SetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(_('SetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), E_USER_NOTICE);
 			self::_putDebug(
-				\sprintf(('SetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(_('SetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), 3);
 			self::_errorLog(
-				\sprintf(('SetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(_('SetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), 2);
 			return FALSE;
 		}
@@ -579,13 +579,13 @@ class BasicIPP
 		else
 		{
 			trigger_error(
-				\sprintf(('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(_('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), E_USER_NOTICE);
 			self::_putDebug(
-				\sprintf(('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(_('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), 3);
 			self::_errorLog(
-				\sprintf(('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
+				sprintf(_('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
 					$attribute), 2);
 			return FALSE;
 		}
@@ -1159,7 +1159,7 @@ class BasicIPP
 				$errno = $strings[1];
 				$string = strtoupper(str_replace(' ', '_', $strings[2]));
 				trigger_error(
-					\sprintf(("server responds %s"), $server_response),
+					sprintf(_("server responds %s"), $server_response),
 					E_USER_WARNING);
 				self::_errorLog("server responds " . $server_response, 1);
 				$this->serveroutput->httpstatus =
@@ -1515,7 +1515,7 @@ class BasicIPP
 		}
 		$this->stringjob .= chr(0x03); // end-of-attributes | end-of-attributes-tag
 		self::_putDebug(
-			\sprintf(("String sent to the server is: %s"),
+			sprintf(_("String sent to the server is: %s"),
 				$this->stringjob)
 		);
 		return TRUE;
@@ -1860,9 +1860,9 @@ class BasicIPP
 				break;
 
 			default:
-				trigger_error(\sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
-				self::_putDebug(\sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
-				self::_errorLog(\sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
+				self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
 				return FALSE;
 				break;
 		}
@@ -1885,9 +1885,9 @@ class BasicIPP
 				break;
 
 			default:
-				trigger_error(\sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
-				self::_putDebug(\sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
-				self::_errorLog(\sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
+				self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
 				return FALSE;
 				break;
 		}
@@ -1910,9 +1910,9 @@ class BasicIPP
 				break;
 
 			default:
-				trigger_error(\sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
-				self::_putDebug(\sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
-				self::_errorLog(\sprintf(('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
+				self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+				self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
 				return FALSE;
 				break;
 		}

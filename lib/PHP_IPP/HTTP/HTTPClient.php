@@ -157,7 +157,7 @@ class HTTPClient
 			$url = preg_split("#/#", preg_replace("#^/{1,}#", '', $url), 2);
 			$url = $url[0];
 			$port = $this->port;
-			$error = \sprintf(("Cannot resolve url: %s"), $url);
+			$error = sprintf(_("Cannot resolve url: %s"), $url);
 			$ip = gethostbyname($url);
 			$ip = @gethostbyaddr($ip);
 			if (!$ip)
@@ -174,7 +174,7 @@ class HTTPClient
 		}
 		$this->connection = @fsockopen($transport_type . $url, $port, $errno, $errstr, $this->timeout);
 		$error =
-			\sprintf(('Unable to connect to "%s%s port %s": %s'), $transport_type,
+			sprintf(_('Unable to connect to "%s%s port %s": %s'), $transport_type,
 				$url, $port, $errstr);
 		if (!$this->connection)
 		{
@@ -187,7 +187,7 @@ class HTTPClient
 	public function SendRequest($arguments)
 	{
 		$error =
-			\sprintf(('Streaming request failed to %s'), $arguments['RequestURI']);
+			sprintf(_('Streaming request failed to %s'), $arguments['RequestURI']);
 		$result = self::_StreamRequest($arguments);
 		if (!$result[0])
 		{
@@ -220,7 +220,7 @@ class HTTPClient
 
 			default:
 				$error =
-					\sprintf(("need '%s' authentication mechanism, but have not"),
+					sprintf(_("need '%s' authentication mechanism, but have not"),
 						$authtype[0]);
 				return $this->_HttpError($error, E_USER_WARNING);
 				break;
@@ -228,7 +228,7 @@ class HTTPClient
 		self::Close();
 		self::Open($arguments);
 
-		$error = \sprintf(('Streaming request failed to %s after a try to authenticate'), $arguments['RequestURI']);
+		$error = sprintf(_('Streaming request failed to %s after a try to authenticate'), $arguments['RequestURI']);
 		$result = self::_StreamRequest($arguments);
 		if (!$result[0])
 		{
@@ -324,7 +324,7 @@ class HTTPClient
 				{
 					$length = 0;
 					return
-						_HttpError(\sprintf(("%s: file is not readable"), $value),
+						_HttpError(sprintf(_("%s: file is not readable"), $value),
 							E_USER_WARNING);
 				}
 			}
@@ -338,7 +338,7 @@ class HTTPClient
 			}
 			$content_length += $length;
 		}
-		$this->request_body = \sprintf(("%s Bytes"), $content_length);
+		$this->request_body = sprintf(_("%s Bytes"), $content_length);
 		$this->headers["Content-Length"] = $content_length;
 		$this->arguments["Headers"] =
 			array_merge($this->headers, $this->arguments["Headers"]);
@@ -511,7 +511,7 @@ class HTTPClient
 
 				default:
 					return _HttpError(
-						\sprintf(("digest Authorization: algorithm '%s' not implemented"),
+						sprintf(_("digest Authorization: algorithm '%s' not implemented"),
 							$algorithm),
 						E_USER_WARNING);
 					return false;
@@ -531,7 +531,7 @@ class HTTPClient
 			else
 			{
 				self::_HttpError(
-					\sprintf(("digest Authorization: algorithm '%s' not implemented"),
+					sprintf(_("digest Authorization: algorithm '%s' not implemented"),
 						$qop),
 					E_USER_WARNING);
 				return false;
