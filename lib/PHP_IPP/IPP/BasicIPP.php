@@ -186,7 +186,7 @@ class BasicIPP
 		$this->meta->mime_media_type = "";
 		$this->setup->mime_media_type = 1;
 		$this->datahead = chr(0x16);
-		if (file_exists($this->data) && is_readable($this->data))
+		if ((strlen($this->data) < 2048) && preg_match('/^[^*?"<>|:]*$/',$this->data) && is_readable($this->data))
 		{
 			//It's a filename.  Open and stream.
 			$data = fopen($this->data, "rb");
@@ -673,7 +673,7 @@ class BasicIPP
 		if (!$this->_stringJob()) {
 			return FALSE;
 		}
-		if (file_exists($this->data) && is_readable($this->data))
+		if ((strlen($this->data) < 2048) && preg_match('/^[^*?"<>|:]*$/',$this->data) && is_readable($this->data))
 		{
 			self::_putDebug(("Printing a FILE"));
 			$this->output = $this->stringjob;
