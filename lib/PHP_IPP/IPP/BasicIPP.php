@@ -126,12 +126,12 @@ class BasicIPP
 		}
 
 		date_default_timezone_set($tz);
-		$this->meta = new stdClass();
-		$this->setup = new stdClass();
-		$this->values = new stdClass();
-		$this->serveroutput = new stdClass();
-		$this->error_generation = new stdClass();
-		$this->_parsing = new stdClass();
+		$this->meta = new \stdClass();
+		$this->setup = new \stdClass();
+		$this->values = new \stdClass();
+		$this->serveroutput = new \stdClass();
+		$this->error_generation = new \stdClass();
+		$this->_parsing = new \stdClass();
 		self::_initTags();
 	}
 

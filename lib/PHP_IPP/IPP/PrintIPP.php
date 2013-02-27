@@ -889,14 +889,14 @@ class PrintIPP extends BasicIPP
 		}
 		$this->serveroutput->response = array();
 
-		$this->printer_attributes = new stdClass();
+		$this->printer_attributes = new \stdClass();
 		for ($i = 0; $i < count($this->parsed); $i++)
 		{
 			$name = $this->parsed[$i]['name'];
 			$php_name = str_replace('-', '_', $name);
 			$type = $this->parsed[$i]['type'];
 			$range = $this->parsed[$i]['range'];
-			$this->printer_attributes->$php_name = new stdClass();
+			$this->printer_attributes->$php_name = new \stdClass();
 			$this->printer_attributes->$php_name->_type = $type;
 			$this->printer_attributes->$php_name->_range = $range;
 			for ($j = 0; $j < (count($this->parsed[$i]) - 3); $j++)
@@ -945,18 +945,18 @@ class PrintIPP extends BasicIPP
 		}
 
 		$this->serveroutput->response = array();
-		$this->jobs_attributes = new stdClass();
+		$this->jobs_attributes = new \stdClass();
 		for ($job_nbr = 0; $job_nbr <= $job; $job_nbr++)
 		{
 			$job_index = "job_" . $job_nbr;
-			$this->jobs_attributes->$job_index = new stdClass();
+			$this->jobs_attributes->$job_index = new \stdClass();
 			for ($i = 0; $i < count($this->parsed[$job_nbr]); $i++)
 			{
 				$name = $this->parsed[$job_nbr][$i]['name'];
 				$php_name = str_replace('-', '_', $name);
 				$type = $this->parsed[$job_nbr][$i]['type'];
 				$range = $this->parsed[$job_nbr][$i]['range'];
-				$this->jobs_attributes->$job_index->$php_name = new stdClass();
+				$this->jobs_attributes->$job_index->$php_name = new \stdClass();
 				$this->jobs_attributes->$job_index->$php_name->_type = $type;
 				$this->jobs_attributes->$job_index->$php_name->_range = $range;
 				for ($j = 0; $j < (count($this->parsed[$job_nbr][$i]) - 3); $j++)
@@ -1404,14 +1404,14 @@ class PrintIPP extends BasicIPP
 			}
 		}
 		$this->serveroutput->response = array();
-		$this->attributes = new stdClass();
+		$this->attributes = new \stdClass();
 		for ($i = 0; $i < count($this->parsed); $i++)
 		{
 			$name = $this->parsed[$i]['name'];
 			$php_name = str_replace('-', '_', $name);
 			$type = $this->parsed[$i]['type'];
 			$range = $this->parsed[$i]['range'];
-			$this->attributes->$php_name = new stdClass();
+			$this->attributes->$php_name = new \stdClass();
 			$this->attributes->$php_name->_type = $type;
 			$this->attributes->$php_name->_range = $range;
 			for ($j = 0; $j < (count($this->parsed[$i]) - 3); $j++)
@@ -1454,14 +1454,14 @@ class PrintIPP extends BasicIPP
 
 		$this->serveroutput->response = array();
 
-		$this->job_attributes = new stdClass();
+		$this->job_attributes = new \stdClass();
 		for ($i = 0; $i < count($this->parsed); $i++)
 		{
 			$name = $this->parsed[$i]['name'];
 			$php_name = str_replace('-', '_', $name);
 			$type = $this->parsed[$i]['type'];
 			$range = $this->parsed[$i]['range'];
-			$this->job_attributes->$php_name = new stdClass();
+			$this->job_attributes->$php_name = new \stdClass();
 			$this->job_attributes->$php_name->_type = $type;
 			$this->job_attributes->$php_name->_range = $range;
 			for ($j = 0; $j < (count($this->parsed[$i]) - 3); $j++)

@@ -552,14 +552,14 @@ class CupsPrintIPP extends ExtendedPrintIPP
 		$this->available_printers = array();
         $this->printer_map = array();
 		$k = 0;
-		$this->printers_attributes = new stdClass();
+		$this->printers_attributes = new \stdClass();
 
 		for ($i = 0; (array_key_exists($i, $this->serveroutput->response)); $i++)
 		{
 			if (($this->serveroutput->response[$i]['attributes']) == "printer-attributes")
 			{
 				$phpname = "_printer" . $k;
-				$this->printers_attributes->$phpname = new stdClass();
+				$this->printers_attributes->$phpname = new \stdClass();
 				for ($j = 0; array_key_exists($j, $this->serveroutput->response[$i]); $j++)
 				{
 
@@ -573,7 +573,7 @@ class CupsPrintIPP extends ExtendedPrintIPP
 							break;
 						case "printer_type":
 							$table = self::_interpretPrinterType($value);
-							$this->printers_attributes->$phpname->$name = new stdClass();
+							$this->printers_attributes->$phpname->$name = new \stdClass();
 
 							for ($l = 0; $l < count($table); $l++)
 							{
