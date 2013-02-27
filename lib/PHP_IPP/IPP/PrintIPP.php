@@ -60,7 +60,7 @@ class PrintIPP extends BasicIPP
 			return FALSE;
 		}
 
-		if (is_readable($this->data))
+		if (file_exists($this->data) && is_readable($this->data))
 		{
 			self::_putDebug(("Printing a FILE\n"), 3);
 
@@ -251,7 +251,7 @@ class PrintIPP extends BasicIPP
 
 		if (!isset($this->setup->jobname))
 		{
-			if (is_readable($this->data))
+			if (file_exists($this->data) && is_readable($this->data))
 			{
 				self::setJobName(basename($this->data), true);
 			}

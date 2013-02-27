@@ -69,7 +69,7 @@ class BasicIPP
 	public $job_attributes; // object you can read: last job attributes
 	public $jobs_attributes; // object you can read: jobs attributes after getJobs()
 	public $available_printers = array();
-    public $printer_map = array();
+        public $printer_map = array();
 	public $printers_uri = array();
 	public $debug = array();
 	public $response;
@@ -186,7 +186,7 @@ class BasicIPP
 		$this->meta->mime_media_type = "";
 		$this->setup->mime_media_type = 1;
 		$this->datahead = chr(0x16);
-		if (is_readable($this->data))
+		if (file_exists($this->data) && is_readable($this->data))
 		{
 			//It's a filename.  Open and stream.
 			$data = fopen($this->data, "rb");
@@ -673,7 +673,7 @@ class BasicIPP
 		if (!$this->_stringJob()) {
 			return FALSE;
 		}
-		if (is_readable($this->data))
+		if (file_exists($this->data) && is_readable($this->data))
 		{
 			self::_putDebug(("Printing a FILE"));
 			$this->output = $this->stringjob;

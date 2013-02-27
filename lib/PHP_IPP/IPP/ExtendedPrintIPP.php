@@ -276,7 +276,7 @@ class ExtendedPrintIPP extends PrintIPP
 
 		if (!isset($this->setup->jobname))
 		{
-			if (is_readable($this->data))
+			if (file_exists($this->data) && is_readable($this->data))
 			{
 				self::setJobName(basename($this->data), true);
 			}
@@ -390,7 +390,7 @@ class ExtendedPrintIPP extends PrintIPP
 			return FALSE;
 		}
 
-		if (is_readable($this->data))
+		if (file_exists($this->data) && is_readable($this->data))
 		{
 			self::_putDebug(("sending Document\n"));
 
@@ -1346,7 +1346,7 @@ class ExtendedPrintIPP extends PrintIPP
 
 		if (!isset($this->setup->jobname))
 		{
-			if (is_readable($this->data))
+			if (file_exists($this->data) && is_readable($this->data))
 			{
 				self::setJobName(basename($this->data), true);
 			}
