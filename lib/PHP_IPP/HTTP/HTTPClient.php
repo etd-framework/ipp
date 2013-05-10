@@ -82,7 +82,7 @@ class HTTPClient
 	public $request_body = "Not a useful information";
 	public $status;
 	public $window_size = 1024; // chunk size of data
-	public $with_exceptions = 0; // compatibility mode for old scripts
+	public $with_exceptions = 1; // compatibility mode for old scripts
 	public $port;
 	public $host;
 	private $default_port = 631;
@@ -266,14 +266,7 @@ class HTTPClient
 
 	private function _HttpError($msg, $level, $errno = null)
 	{
-		$trace_msg = '';
-		$backtrace = debug_backtrace();
-		foreach ($backtrace as $trace)
-		{
-			$trace_msg .= sprintf("in [file: '%s'][function: '%s'][line: %s];\n", $trace['file'], $trace['function'], $trace['line']);
-		}
-		$msg = sprintf('%s\n%s: [errno: %s]: %s',
-			$trace_msg, $this->error2string($level), $errno, $msg);
+		$msg = sprintf('%s: [errno: %s]: %s', $this->error2string($level), $errno, $msg);
 		if ($this->with_exceptions)
 		{
 			throw new HTTPClientException ($msg, $errno);

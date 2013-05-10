@@ -55,7 +55,7 @@ class BasicIPP
 	public $ssl = false;
 	public $debug_level = 3; // max 3: almost silent
 	public $alert_on_end_tag; // debugging purpose: echo "END tag OK" if (1 and  reads while end tag)
-	public $with_exceptions = 0; // compatibility mode for old scripts
+	public $with_exceptions = 1; // compatibility mode for old scripts
 	public $handle_http_exceptions = 1;
 
 	// readables variables
