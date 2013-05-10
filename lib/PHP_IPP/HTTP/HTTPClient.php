@@ -266,14 +266,14 @@ class HTTPClient
 
 	private function _HttpError($msg, $level, $errno = null)
 	{
-		$trace = '';
+		$trace_msg = '';
 		$backtrace = debug_backtrace();
 		foreach ($backtrace as $trace)
 		{
-			$trace .= sprintf("in [file: '%s'][function: '%s'][line: %s];\n", $trace['file'], $trace['function'], $trace['line']);
+			$trace_msg .= sprintf("in [file: '%s'][function: '%s'][line: %s];\n", $trace['file'], $trace['function'], $trace['line']);
 		}
 		$msg = sprintf('%s\n%s: [errno: %s]: %s',
-			$trace, $this->error2string($level), $errno, $msg);
+			$trace_msg, $this->error2string($level), $errno, $msg);
 		if ($this->with_exceptions)
 		{
 			throw new HTTPClientException ($msg, $errno);
