@@ -60,14 +60,14 @@
  * - http_class
  */
 
-namespace PHP_IPP\HTTP;
+namespace EtdSolutions\Ipp\Exception;
 
 /***********************
  *
  * HTTPClientException class
  *
  ************************/
-class HTTPClientException extends \Exception
+class HttpClientException extends \Exception
 {
 	protected $errno;
 

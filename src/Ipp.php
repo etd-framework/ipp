@@ -41,9 +41,11 @@
     TODO: beta tests on other servers than Cups
 */
 
-namespace PHP_IPP\IPP;
+namespace EtdSolutions\Ipp;
 
-class PrintIPP extends BasicIPP
+use EtdSolutions\Ipp\Exception\IppException;
+
+class Ipp extends Basic
 {
 	public function __construct()
 	{
@@ -125,7 +127,7 @@ class PrintIPP extends BasicIPP
 				self::_errorLog(sprintf("printing job: ", $this->last_job) . $this->serveroutput->status, 1);
 				if ($this->with_exceptions)
 				{
-					throw new IPPException(sprintf("job status: %s",
+					throw new IppException(sprintf("job status: %s",
 						$this->serveroutput->status));
 				}
 			}

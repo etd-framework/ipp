@@ -37,12 +37,13 @@
    - RFC 3382
  */
 
-namespace PHP_IPP\IPP;
+namespace EtdSolutions\Ipp;
 
-use PHP_IPP\HTTP\HTTPClient;
-use PHP_IPP\HTTP\HTTPClientException;
+use EtdSolutions\Ipp\Http\HttpClient;
+use EtdSolutions\Ipp\Exception\HttpClientException;
+use EtdSolutions\Ipp\Exception\IppException;
 
-class BasicIPP
+class Basic
 {
 	public $paths = array(
 		"root" => "/",
@@ -69,7 +70,7 @@ class BasicIPP
 	public $job_attributes; // object you can read: last job attributes
 	public $jobs_attributes; // object you can read: jobs attributes after getJobs()
 	public $available_printers = array();
-        public $printer_map = array();
+	public $printer_map = array();
 	public $printers_uri = array();
 	public $debug = array();
 	public $response;
@@ -602,7 +603,7 @@ class BasicIPP
 	 * @param string $destination_type
 	 * @param int $level
 	 *
-	 * @throws IPPException
+	 * @throws IppException
 	 */
 	public function setLog($log_destination, $destination_type = 'file', $level = 2)
 	{
@@ -759,7 +760,7 @@ class BasicIPP
 		self::_putDebug(("Processing HTTP request"), 2);
 		$this->serveroutput->headers = array();
 		$this->serveroutput->body = "";
-		$http = new HTTPClient;
+		$http = new HttpClient;
 		if (!$this->unix) {
 			$http->host = $this->host;
 		}
@@ -818,9 +819,9 @@ class BasicIPP
 			{
 				$success = $http->Open($arguments);
 			}
-			catch (HTTPClientException $e)
+			catch (HttpClientException $e)
 			{
-				throw new IPPException(
+				throw new IppException(
 					sprintf("http error: %s", $e->getMessage()),
 					$e->getErrno());
 			}
@@ -1627,7 +1628,7 @@ class BasicIPP
 
 			if ($this->with_exceptions)
 			{
-				throw new IPPException($errmsg);
+				throw new IppException($errmsg);
 			}
 			else
 			{

@@ -1,0 +1,27 @@
+{
+  "name": "etdsolutions/ipp",
+  "description": "Package IPP du Framework ETD",
+  "homepage": "https://github.com/etd-framework/application",
+  "license": "LGPL-2.0",
+  "authors": [
+    {
+      "name": "Thomas Harding",
+      "email": "thomas.harding@laposte.net",
+      "role": "Creator"
+    },
+    {
+      "name": "Jean-Baptiste Alleaume",
+      "email": "jb.alleaume@etd-solutions.com",
+      "homepage": "http://alleau.me",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "EtdSolutions\\Ipp\\": "src/"
+    }
+  }
+}

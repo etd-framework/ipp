@@ -36,9 +36,9 @@
    - RFC 3382
  */
 
-namespace PHP_IPP\IPP;
+namespace EtdSolutions\Ipp\Exception;
 
-class IPPException extends \Exception
+class IppException extends \Exception
 {
 	protected $errno;
 

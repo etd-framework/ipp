@@ -41,9 +41,9 @@
         - ...
 */
 
-namespace PHP_IPP\IPP;
+namespace EtdSolutions\Ipp;
 
-class ExtendedPrintIPP extends PrintIPP
+class Extended extends Ipp
 {
 	public function __construct()
 	{

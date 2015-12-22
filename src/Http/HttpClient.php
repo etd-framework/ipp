@@ -60,14 +60,15 @@
  * - http_class
  */
 
-namespace PHP_IPP\HTTP;
+namespace EtdSolutions\Ipp\Http;
+use EtdSolutions\Ipp\Exception\HttpClientException;
 
 /***********************
  *
  * class HTTPClient
  *
  ************************/
-class HTTPClient
+class HttpClient
 {
 	// variables declaration
 	public $debug;
@@ -269,7 +270,7 @@ class HTTPClient
 		$msg = sprintf('%s: [errno: %s]: %s', $this->error2string($level), $errno, $msg);
 		if ($this->with_exceptions)
 		{
-			throw new HTTPClientException ($msg, $errno);
+			throw new HttpClientException ($msg, $errno);
 		}
 		else
 		{

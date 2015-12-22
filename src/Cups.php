@@ -36,9 +36,9 @@
 		- CUPS-IPP-1.1
 */
 
-namespace PHP_IPP\IPP;
+namespace EtdSolutions\Ipp;
 
-class CupsPrintIPP extends ExtendedPrintIPP
+class Cups extends Extended
 {
 	public $printers_attributes;
 	public $defaults_attributes;
