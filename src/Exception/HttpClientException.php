@@ -88,4 +88,3 @@ class HttpClientException extends \Exception
 		return $this->errno;
 	}
 }
-?>

@@ -598,14 +598,3 @@ class HttpClient
                 return implode(' | ', $levels);
         }
 }
-
-;
-
-/*
- * Local variables:
- * mode: php
- * tab-width: 2
- * c-basic-offset: 2
- * End:
- */
-?>
