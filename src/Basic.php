@@ -1037,6 +1037,9 @@ class Basic
 			"multiple-document-handling" => array(
 				"tag" => "keyword"
 			),
+			"sheet-collate" => array(
+				"tag" => "keyword"
+			),
 			//"copies" => array("tag" => "integer"),
 			"finishings" => array(
 				"tag" => "enum"
