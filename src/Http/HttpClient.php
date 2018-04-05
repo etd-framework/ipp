@@ -303,7 +303,7 @@ class HttpClient
 		$this->reply_body = "";
 		if (!$this->connected)
 		{
-			return _HttpError(("not connected"), E_USER_WARNING);
+			return $this->_HttpError(("not connected"), E_USER_WARNING);
 		}
 		$this->arguments = $arguments;
 		$content_length = 0;
@@ -325,7 +325,7 @@ class HttpClient
 				{
 					$length = 0;
 					return
-						_HttpError(sprintf(("%s: file is not readable"), $value),
+						$this->_HttpError(sprintf(("%s: file is not readable"), $value),
 							E_USER_WARNING);
 				}
 			}
@@ -333,7 +333,7 @@ class HttpClient
 			{
 				$length = 0;
 				return
-					_HttpError(sprintf
+					$this->_HttpError(sprintf
 						(("%s: not a valid argument for content"), $type),
 						E_USER_WARNING);
 			}
@@ -346,7 +346,7 @@ class HttpClient
 		if ($this->arguments["RequestMethod"] != "POST")
 		{
 			return
-				_HttpError(sprintf
+				$this->_HttpError(sprintf
 				(("%s: method not implemented"),
 					$arguments["RequestMethod"]), E_USER_WARNING);
 		}
@@ -355,7 +355,7 @@ class HttpClient
 		$this->request_headers[$string] = '';
 		if (!$this->_streamString($string))
 		{
-			return _HttpError(("Error while puts POST operation"),
+			return $this->_HttpError(("Error while puts POST operation"),
 				E_USER_WARNING);
 		}
 		foreach ($this->arguments["Headers"] as $header => $value)
@@ -364,14 +364,14 @@ class HttpClient
 			$this->request_headers[$header] = $value;
 			if (!$this->_streamString($string))
 			{
-				return _HttpError(("Error while puts HTTP headers"),
+				return $this->_HttpError(("Error while puts HTTP headers"),
 					E_USER_WARNING);
 			}
 		}
 		$string = "\r\n";
 		if (!$this->_streamString($string))
 		{
-			return _HttpError(("Error while ends HTTP headers"),
+			return $this->_HttpError(("Error while ends HTTP headers"),
 				E_USER_WARNING);
 		}
 		foreach ($this->arguments["BodyStream"] as $argument)
@@ -386,7 +386,7 @@ class HttpClient
 					$string = substr($value, $streamed_length, $this->window_size);
 					if (!$this->_streamString($string))
 					{
-						return _HttpError(("error while sending body data"),
+						return $this->_HttpError(("error while sending body data"),
 							E_USER_WARNING);
 					}
 					$streamed_length += $this->window_size;
@@ -403,12 +403,12 @@ class HttpClient
 							"string"
 						)
 						{
-							return _HttpError(("cannot read file to upload"),
+							return $this->_HttpError(("cannot read file to upload"),
 								E_USER_WARNING);
 						}
 						if (!$this->_streamString($block))
 						{
-							return _HttpError(("error while sending body data"),
+							return $this->_HttpError(("error while sending body data"),
 								E_USER_WARNING);
 						}
 					}
@@ -511,7 +511,7 @@ class HttpClient
 					break;
 
 				default:
-					return _HttpError(
+					return $this->_HttpError(
 						sprintf(("digest Authorization: algorithm '%s' not implemented"),
 							$algorithm),
 						E_USER_WARNING);
@@ -531,7 +531,7 @@ class HttpClient
 			}
 			else
 			{
-				self::_HttpError(
+				$this->_HttpError(
 					sprintf(("digest Authorization: algorithm '%s' not implemented"),
 						$qop),
 					E_USER_WARNING);
