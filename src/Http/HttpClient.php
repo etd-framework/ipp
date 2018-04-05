@@ -86,6 +86,7 @@ class HttpClient
 	public $with_exceptions = 1; // compatibility mode for old scripts
 	public $port;
 	public $host;
+	public $https_protocol = "tls";
 	private $default_port = 631;
 	private $headers;
 	private $reply_headers = array();
@@ -138,7 +139,7 @@ class HttpClient
 				break;
 
 			case 'https':
-				$transport_type = 'tls://';
+				$transport_type = $this->https_protocol . '://';
 				break;
 
 			case 'unix':

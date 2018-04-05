@@ -54,6 +54,7 @@ class Basic
 	public $http_timeout = 30; // timeout at http connection (seconds) 0 => default => 30.
 	public $http_data_timeout = 30; // data reading timeout (milliseconds) 0 => default => 30.
 	public $ssl = false;
+	public $ssl_protocol = 'tls';
 	public $debug_level = 3; // max 3: almost silent
 	public $alert_on_end_tag; // debugging purpose: echo "END tag OK" if (1 and  reads while end tag)
 	public $with_exceptions = 1; // compatibility mode for old scripts
@@ -780,6 +781,7 @@ class Basic
 		}
 		$url = "http://" . $this->host;
 		if ($this->ssl) {
+			$http->https_protocol = $this->ssl_protocol;
 			$url = "https://" . $this->host;
 		}
 		if ($this->unix) {
