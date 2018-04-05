@@ -174,7 +174,13 @@ class HttpClient
 				}
 			}
 		}
-		$this->connection = @fsockopen($transport_type . $url, $port, $errno, $errstr, $this->timeout);
+		//$this->connection = @fsockopen($transport_type . $url, $port, $errno, $errstr, $this->timeout);
+		$context = stream_context_create([
+			'ssl' => [
+				'verify_peer' => false
+			]
+		]);
+		$this->connection = @stream_socket_client($transport_type . $url . ":" . $port, $errno, $errstr, $this->timeout, null, $context);
 		$error =
 			sprintf(('Unable to connect to "%s%s port %s": %s'), $transport_type,
 				$url, $port, $errstr);
