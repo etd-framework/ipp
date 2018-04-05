@@ -180,7 +180,7 @@ class HttpClient
 				'verify_peer' => false
 			]
 		]);
-		$this->connection = @stream_socket_client($transport_type . $url . ":" . $port, $errno, $errstr, $this->timeout, null, $context);
+		$this->connection = @stream_socket_client($transport_type . $url . ":" . $port, $errno, $errstr, $this->timeout, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $context);
 		$error =
 			sprintf(('Unable to connect to "%s%s port %s": %s'), $transport_type,
 				$url, $port, $errstr);
