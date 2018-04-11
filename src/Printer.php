@@ -70,10 +70,11 @@ class Printer {
 
     public function execute($msg = [], $operation = 'Get-Printer-Attributes', $cb = null) {
 
-        $msg = $this->message($msg, $operation);
-        $buf = Serializer::serialize($msg);
+        $serializer = new Serializer();
+        $msg        = $this->message($msg, $operation);
+        $buffer     = $serializer->serialize($msg);
 
-        return new Request($this->url, $buf, $cb);
+        return new Request($this->url, $buffer, $cb);
 
     }
 
