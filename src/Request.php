@@ -9,12 +9,60 @@
 
 namespace EtdSolutions\IPP;
 
-use Http\Client\HttpClient;
-use GuzzleHttp\Psr7\Uri;
+use Joomla\Http\HttpFactory;
+use Joomla\Uri\Uri;
 
 class Request {
 
-    public function __construct($url, $buf, $cb) {
+    /**
+     * Request constructor.
+     * @param Uri|string $url
+     * @param Buffer|callable $buffer
+     */
+    public function __construct($url, $buffer) {
+
+        $opts = [
+            "transport.curl" => [
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false
+            ]
+        ];
+
+        //All IPP requires are POSTs- so we must have some data.
+	    //  10 is just a number I picked- this probably should have something more meaningful
+	    if (!Buffer::isBuffer($buffer) || $buffer->length() < 10){
+            throw new \RuntimeException("Data required");
+        }
+
+        if (is_string($url)) {
+            $url = new Uri($url);
+        }
+
+        if ($url->getPort() === null) {
+            $url->setPort(631);
+        }
+
+        $headers = ["Content-Type" => "application/ipp"];
+
+        if ($url->getScheme() == 'ipp') {
+            $url->setScheme('http');
+        } elseif ($url->getScheme() == 'ipps') {
+            $url->setScheme('https');
+        }
+
+        $http   = HttpFactory::getHttp($opts);
+        $parser = new Parser();
+var_dump($buffer);die;
+        $response = $http->post($url, (string) $buffer, $headers);
+
+        if ($response->code != 200) {
+            throw new \RuntimeException('Received unexpected response status ' . $response->code . ' from the printer', $response->code);
+        }
+
+        $obj = $parser->parse(Buffer::concat($response->body, strlen($response->body)));
+        unset($obj["operation"]);
+
+        return $obj;
 
     }
 

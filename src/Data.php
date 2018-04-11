@@ -67,7 +67,67 @@ class Data {
      */
     protected static $MAX;
 
-    protected function seed() {
+    protected static function seedTags() {
+        // Tags
+        // ------------
+
+        $tags = [
+            null,                                     // 0x00 http://tools.ietf.org/html/rfc2910#section-3.5.1
+            "operation-attributes-tag",           // 0x01 http://tools.ietf.org/html/rfc2910#section-3.5.1
+            "job-attributes-tag",                 // 0x02 http://tools.ietf.org/html/rfc2910#section-3.5.1
+            "end-of-attributes-tag",              // 0x03 http://tools.ietf.org/html/rfc2910#section-3.5.1
+            "printer-attributes-tag",             // 0x04 http://tools.ietf.org/html/rfc2910#section-3.5.1
+            "unsupported-attributes-tag",         // 0x05 http://tools.ietf.org/html/rfc2910#section-3.5.1
+            "subscription-attributes-tag",        // 0x06 http://tools.ietf.org/html/rfc3995#section-14
+            "event-notification-attributes-tag",  // 0x07 http://tools.ietf.org/html/rfc3995#section-14
+            "resource-attributes-tag",            // 0x08 http://tools.ietf.org/html/draft-ietf-ipp-get-resource-00#section-11    did not get standardized
+            "document-attributes-tag",            // 0x09 ftp://ftp.pwg.org/pub/pwg/candidates/cs-ippdocobject10-20031031-5100.5.pdf
+            null, null, null, null, null, null,                                // 0x0A - 0x0F
+            "unsupported",                        // 0x10 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "default",                            // 0x11 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "unknown",                            // 0x12 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "no-value",                           // 0x13 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            null,                                     // 0x14
+            "not-settable",                       // 0x15 http://tools.ietf.org/html/rfc3380#section-8.1
+            "delete-attribute",                   // 0x16 http://tools.ietf.org/html/rfc3380#section-8.2
+            "admin-define",                       // 0x17 http://tools.ietf.org/html/rfc3380#section-8.3
+            null, null, null, null, null, null, null, null, null,                             // 0x18 - 0x20
+            "integer",                            // 0x21 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "boolean",                            // 0x22 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "enum",                               // 0x23 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            null, null, null, null, null, null, null, null, null, null, null, null,                          // 0x24 - 0x2Fnull
+            "octetString",                        // 0x30 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "dateTime",                           // 0x31 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "resolution",                         // 0x32 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "rangeOfInteger",                     // 0x33 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "begCollection",                      // 0x34 http://tools.ietf.org/html/rfc3382#section-7.1
+            "textWithLanguage",                   // 0x35 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "nameWithLanguage",                   // 0x36 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "endCollection",                      // 0x37 http://tools.ietf.org/html/rfc3382#section-7.1
+            null, null, null, null, null, null, null, null, null,                             // 0x38 - 0x40
+            "textWithoutLanguage",                // 0x41 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "nameWithoutLanguage",                // 0x42 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            null,                                     // 0x43
+            "keyword",                            // 0x44 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "uri",                                // 0x45 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "uriScheme",                          // 0x46 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "charset",                            // 0x47 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "naturalLanguage",                    // 0x48 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "mimeMediaType",                      // 0x49 http://tools.ietf.org/html/rfc2910#section-3.5.2
+            "memberAttrName"                      // 0x4A http://tools.ietf.org/html/rfc3382#section-7.1
+        ];
+
+        $tags[0x7F] = "extension"; // http://tools.ietf.org/html/rfc2910#section-3.5.2
+        $tags       = Util::xref($tags);
+
+        if (!isset(self::$data)) {
+            self::$data = [];
+        }
+
+        self::$data["tags"] = $tags;
+    }
+
+    protected static function seedEnums() {
 
         // Enums
         // ------------
@@ -239,57 +299,15 @@ class Data {
         $enums["print-quality-default"]           = $enums["print-quality"];
         $enums["print-quality-supported"]         = $enums["print-quality"];//1setOf
 
-        // Tags
-        // ------------
+        if (!isset(self::$data)) {
+            self::$data = [];
+        }
 
-        $tags = [
-            null,                                     // 0x00 http://tools.ietf.org/html/rfc2910#section-3.5.1
-            "operation-attributes-tag",           // 0x01 http://tools.ietf.org/html/rfc2910#section-3.5.1
-            "job-attributes-tag",                 // 0x02 http://tools.ietf.org/html/rfc2910#section-3.5.1
-            "end-of-attributes-tag",              // 0x03 http://tools.ietf.org/html/rfc2910#section-3.5.1
-            "printer-attributes-tag",             // 0x04 http://tools.ietf.org/html/rfc2910#section-3.5.1
-            "unsupported-attributes-tag",         // 0x05 http://tools.ietf.org/html/rfc2910#section-3.5.1
-            "subscription-attributes-tag",        // 0x06 http://tools.ietf.org/html/rfc3995#section-14
-            "event-notification-attributes-tag",  // 0x07 http://tools.ietf.org/html/rfc3995#section-14
-            "resource-attributes-tag",            // 0x08 http://tools.ietf.org/html/draft-ietf-ipp-get-resource-00#section-11    did not get standardized
-            "document-attributes-tag",            // 0x09 ftp://ftp.pwg.org/pub/pwg/candidates/cs-ippdocobject10-20031031-5100.5.pdf
-            null, null, null, null, null, null,                                // 0x0A - 0x0F
-            "unsupported",                        // 0x10 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "default",                            // 0x11 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "unknown",                            // 0x12 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "no-value",                           // 0x13 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            null,                                     // 0x14
-            "not-settable",                       // 0x15 http://tools.ietf.org/html/rfc3380#section-8.1
-            "delete-attribute",                   // 0x16 http://tools.ietf.org/html/rfc3380#section-8.2
-            "admin-define",                       // 0x17 http://tools.ietf.org/html/rfc3380#section-8.3
-            nullnull, null, null, null, null, null, null, null,                             // 0x18 - 0x20
-            "integer",                            // 0x21 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "boolean",                            // 0x22 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "enum",                               // 0x23 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            null, null, null, null, null, null, null, null, null, null, null, null,                          // 0x24 - 0x2Fnull
-            "octetString",                        // 0x30 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "dateTime",                           // 0x31 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "resolution",                         // 0x32 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "rangeOfInteger",                     // 0x33 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "begCollection",                      // 0x34 http://tools.ietf.org/html/rfc3382#section-7.1
-            "textWithLanguage",                   // 0x35 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "nameWithLanguage",                   // 0x36 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "endCollection",                      // 0x37 http://tools.ietf.org/html/rfc3382#section-7.1
-            null, null, null, null, null, null, null, null, null,                             // 0x38 - 0x40
-            "textWithoutLanguage",                // 0x41 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "nameWithoutLanguage",                // 0x42 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            null,                                     // 0x43
-            "keyword",                            // 0x44 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "uri",                                // 0x45 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "uriScheme",                          // 0x46 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "charset",                            // 0x47 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "naturalLanguage",                    // 0x48 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "mimeMediaType",                      // 0x49 http://tools.ietf.org/html/rfc2910#section-3.5.2
-            "memberAttrName"                      // 0x4A http://tools.ietf.org/html/rfc3382#section-7.1
-        ];
+        self::$data["enums"] = $enums;
 
-        $tags[0x7F] = "extension"; // http://tools.ietf.org/html/rfc2910#section-3.5.2
-        $tags       = Util::xref($tags);
+    }
+
+    protected static function seedVersions() {
 
         // Versions
         // ------------
@@ -300,6 +318,15 @@ class Data {
             0x0200 => '2.0',
             0x0201 => '2.1'
         ]);
+
+        if (!isset(self::$data)) {
+            self::$data = [];
+        }
+
+        self::$data["versions"] = $versions;
+    }
+
+    protected static function seedAttributes() {
 
         // Attributes
         // ------------
@@ -313,574 +340,574 @@ class Data {
 
         $attributes = [
             "Document Description"     => [
-                "attributes-charset"                      => "Data::charset",
-                "attributes-natural-language"             => "Data::naturalLanguage",
-                "compression"                             => "Data::keyword",
-                "copies-actual"                           => self::setof(self::integer(1, Data::$MAX)),
+                "attributes-charset"                      => "EtdSolutions\IPP\Data::charset",
+                "attributes-natural-language"             => "EtdSolutions\IPP\Data::naturalLanguage",
+                "compression"                             => "EtdSolutions\IPP\Data::keyword",
+                "copies-actual"                           => self::setof(self::integer(1, self::$MAX)),
                 "cover-back-actual"                       => self::setof(self::collection("Job Template", "cover-back")),
                 "cover-front-actual"                      => self::setof(self::collection("Job Template", "cover-front")),
-                "current-page-order"                      => "Data::keyword",
-                "date-time-at-completed"                  => self::underscore("Data::dateTime", "Data::novalue"),
-                "date-time-at-creation"                   => "Data::dateTime",
-                "date-time-at-processing"                 => _("Data::dateTime", "Data::novalue"),
-                "detailed-status-messages"                => self::setof("Data::text"),
-                "document-access-errors"                  => self::setof("Data::text"),
-                "document-charset"                        => "Data::charset",
-                "document-digital-signature"              => "Data::keyword",
-                "document-format"                         => "Data::mimeMediaType",
+                "current-page-order"                      => "EtdSolutions\IPP\Data::keyword",
+                "date-time-at-completed"                  => self::underscore("EtdSolutions\IPP\Data::dateTime", "EtdSolutions\IPP\Data::novalue"),
+                "date-time-at-creation"                   => "EtdSolutions\IPP\Data::dateTime",
+                "date-time-at-processing"                 => self::underscore("EtdSolutions\IPP\Data::dateTime", "EtdSolutions\IPP\Data::novalue"),
+                "detailed-status-messages"                => self::setof("EtdSolutions\IPP\Data::text"),
+                "document-access-errors"                  => self::setof("EtdSolutions\IPP\Data::text"),
+                "document-charset"                        => "EtdSolutions\IPP\Data::charset",
+                "document-digital-signature"              => "EtdSolutions\IPP\Data::keyword",
+                "document-format"                         => "EtdSolutions\IPP\Data::mimeMediaType",
                 "document-format-details"                 => self::setof(self::collection("Operation", "document-format-details")),
                 "document-format-details-detected"        => self::setof(self::collection("Operation", "document-format-details")),
-                "document-format-detected"                => "Data::mimeMediaType",
+                "document-format-detected"                => "EtdSolutions\IPP\Data::mimeMediaType",
                 "document-format-version"                 => self::text(127),
                 "document-format-version-detected"        => self::text(127),
                 "document-job-id"                         => self::integer(1, self::$MAX),
-                "document-job-uri"                        => "Data::uri",
-                "document-message"                        => "Data::text",
-                "document-metadata"                       => self::setof("Data::octetString"),
-                "document-name"                           => "Data::name",
-                "document-natural-language"               => "Data::naturalLanguage",
+                "document-job-uri"                        => "EtdSolutions\IPP\Data::uri",
+                "document-message"                        => "EtdSolutions\IPP\Data::text",
+                "document-metadata"                       => self::setof("EtdSolutions\IPP\Data::octetString"),
+                "document-name"                           => "EtdSolutions\IPP\Data::name",
+                "document-natural-language"               => "EtdSolutions\IPP\Data::naturalLanguage",
                 "document-number"                         => self::integer(1, self::$MAX),
-                "document-printer-uri"                    => "Data::uri",
-                "document-state"                          => "Data::enumeration",
-                "document-state-message"                  => "Data::text",
-                "document-state-reasons"                  => self::setof("Data::keyword"),
-                "document-uri"                            => "Data::uri",
+                "document-printer-uri"                    => "EtdSolutions\IPP\Data::uri",
+                "document-state"                          => "EtdSolutions\IPP\Data::enumeration",
+                "document-state-message"                  => "EtdSolutions\IPP\Data::text",
+                "document-state-reasons"                  => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "document-uri"                            => "EtdSolutions\IPP\Data::uri",
                 "document-uuid"                           => self::uri(45),
                 "errors-count"                            => self::integer(0, self::$MAX),
-                "finishings-actual"                       => self::setof("Data::enumeration"),
+                "finishings-actual"                       => self::setof("EtdSolutions\IPP\Data::enumeration"),
                 "finishings-col-actual"                   => self::setof(self::collection("Job Template", "finishings-col")),
-                "force-front-side-actual"                 => self::setof(self::integer(1, self::MAX)),
-                "imposition-template-actual"              => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "force-front-side-actual"                 => self::setof(self::integer(1, self::$MAX)),
+                "imposition-template-actual"              => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "impressions"                             => self::integer(0, self::$MAX),
                 "impressions-completed"                   => self::integer(0, self::$MAX),
                 "impressions-completed-current-copy"      => self::integer(0, self::$MAX),
                 "insert-sheet-actual"                     => self::setof(self::collection("Job Template", "insert-sheet")),
                 "k-octets"                                => self::integer(0, self::$MAX),
                 "k-octets-processed"                      => self::integer(0, self::$MAX),
-                "last-document"                           => "Data::boolean",
-                "media-actual"                            => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "last-document"                           => "EtdSolutions\IPP\Data::boolean",
+                "media-actual"                            => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "media-col-actual"                        => self::setof(self::collection("Job Template", "media-col")),
-                "media-input-tray-check-actual"           => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "media-input-tray-check-actual"           => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "media-sheets"                            => self::integer(0, self::$MAX),
                 "media-sheets-completed"                  => self::integer(0, self::$MAX),
-                "more-info"                               => "Data::uri",
-                "number-up-actual"                        => self::setof("Data::integer"),
-                "orientation-requested-actual"            => self::setof("Data::enumeration"),
-                "output-bin-actual"                       => self::setof("Data::name"),
+                "more-info"                               => "EtdSolutions\IPP\Data::uri",
+                "number-up-actual"                        => self::setof("EtdSolutions\IPP\Data::integer"),
+                "orientation-requested-actual"            => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "output-bin-actual"                       => self::setof("EtdSolutions\IPP\Data::name"),
                 "output-device-assigned"                  => self::name(127),
                 "overrides-actual"                        => self::setof(self::collection("Document Template", "overrides")),
-                "page-delivery-actual"                    => self::setof("Data::keyword"),
-                "page-order-received-actual"              => self::setof("Data::keyword"),
+                "page-delivery-actual"                    => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "page-order-received-actual"              => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "page-ranges-actual"                      => self::setof(self::rangeOfInteger(1, self::$MAX)),
                 "pages"                                   => self::integer(0, self::$MAX),
                 "pages-completed"                         => self::integer(0, self::$MAX),
                 "pages-completed-current-copy"            => self::integer(0, self::$MAX),
-                "presentation-direction-number-up-actual" => self::setof("Data::keyword"),
-                "print-content-optimize-actual"           => self::setof("Data::keyword"),
-                "print-quality-actual"                    => self::setof("Data::enumeration"),
-                "printer-resolution-actual"               => self::setof("Data::resolution"),
+                "presentation-direction-number-up-actual" => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "print-content-optimize-actual"           => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "print-quality-actual"                    => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "printer-resolution-actual"               => self::setof("EtdSolutions\IPP\Data::resolution"),
                 "printer-up-time"                         => self::integer(1, self::$MAX),
                 "separator-sheets-actual"                 => self::setof(self::collection("Job Template", "separator-sheets")),
                 "sheet-completed-copy-number"             => self::integer(0, self::$MAX),
-                "sides-actual"                            => self::setof("Data::keyword"),
-                "time-at-completed"                       => self::underscore("Data::integer", "Data::novalue"),
-                "time-at-creation"                        => "Data::integer",
-                "time-at-processing"                      => self::underscore("Data::integer", "Data::novalue"),
-                "x-image-position-actual"                 => self::setof("Data::keyword"),
-                "x-image-shift-actual"                    => self::setof("Data::integer"),
-                "x-side1-image-shift-actual"              => self::setof("Data::integer"),
-                "x-side2-image-shift-actual"              => self::setof("Data::integer"),
-                "y-image-position-actual"                 => self::setof("Data::keyword"),
-                "y-image-shift-actual"                    => self::setof("Data::integer"),
-                "y-side1-image-shift-actual"              => self::setof("Data::integer"),
-                "y-side2-image-shift-actual"              => self::setof("Data::integer")
+                "sides-actual"                            => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "time-at-completed"                       => self::underscore("EtdSolutions\IPP\Data::integer", "EtdSolutions\IPP\Data::novalue"),
+                "time-at-creation"                        => "EtdSolutions\IPP\Data::integer",
+                "time-at-processing"                      => self::underscore("EtdSolutions\IPP\Data::integer", "EtdSolutions\IPP\Data::novalue"),
+                "x-image-position-actual"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "x-image-shift-actual"                    => self::setof("EtdSolutions\IPP\Data::integer"),
+                "x-side1-image-shift-actual"              => self::setof("EtdSolutions\IPP\Data::integer"),
+                "x-side2-image-shift-actual"              => self::setof("EtdSolutions\IPP\Data::integer"),
+                "y-image-position-actual"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "y-image-shift-actual"                    => self::setof("EtdSolutions\IPP\Data::integer"),
+                "y-side1-image-shift-actual"              => self::setof("EtdSolutions\IPP\Data::integer"),
+                "y-side2-image-shift-actual"              => self::setof("EtdSolutions\IPP\Data::integer")
             ],
             "Document Template"        => [
                 "copies"                           => self::integer(1, self::$MAX),
                 "cover-back"                       => self::collection("Job Template", "cover-back"),
                 "cover-front"                      => self::collection("Job Template", "cover-front"),
-                "feed-orientation"                 => "Data::keyword",
-                "finishings"                       => self::setof("Data::enumeration"),
+                "feed-orientation"                 => "EtdSolutions\IPP\Data::keyword",
+                "finishings"                       => self::setof("EtdSolutions\IPP\Data::enumeration"),
                 "finishings-col"                   => self::collection("Job Template", "finishings-col"),
-                "font-name-requested"              => "Data::name",
+                "font-name-requested"              => "EtdSolutions\IPP\Data::name",
                 "font-size-requested"              => self::integer(1, self::$MAX),
                 "force-front-side"                 => self::setof(self::integer(1, self::$MAX)),
-                "imposition-template"              => self::underscore("Data::keyword", "Data::name"),
+                "imposition-template"              => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                 "insert-sheet"                     => self::setof(self::collection("Job Template", "insert-sheet")),
-                "media"                            => self::underscore("Data::keyword", "Data::name"),
+                "media"                            => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                 "media-col"                        => self::collection("Job Template", "media-col"),
-                "media-input-tray-check"           => self::underscore("Data::keyword", "Data::name"),
+                "media-input-tray-check"           => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                 "number-up"                        => self::integer(1, self::$MAX),
-                "orientation-requested"            => "Data::enumeration",
+                "orientation-requested"            => "EtdSolutions\IPP\Data::enumeration",
                 "overrides"                        => self::setof(self::collection([
                     //Any Document Template attribute (TODO)
-                    "document-copies"  => self::setof("Data::rangeOfInteger"),
-                    "document-numbers" => self::setof("Data::rangeOfInteger"),
-                    "pages"            => self::setof("Data::rangeOfInteger")
+                    "document-copies"  => self::setof("EtdSolutions\IPP\Data::rangeOfInteger"),
+                    "document-numbers" => self::setof("EtdSolutions\IPP\Data::rangeOfInteger"),
+                    "pages"            => self::setof("EtdSolutions\IPP\Data::rangeOfInteger")
                 ])),
-                "page-delivery"                    => "Data::keyword",
-                "page-order-received"              => "Data::keyword",
+                "page-delivery"                    => "EtdSolutions\IPP\Data::keyword",
+                "page-order-received"              => "EtdSolutions\IPP\Data::keyword",
                 "page-ranges"                      => self::setof(self::rangeOfInteger(1, self::$MAX)),
                 "pdl-init-file"                    => self::setof(self::collection("Job Template", "pdl-init-file")),
-                "presentation-direction-number-up" => "Data::keyword",
-                "print-color-mode"                 => "Data::keyword",
-                "print-content-optimize"           => "Data::keyword",
-                "print-quality"                    => "Data::enumeration",
-                "print-rendering-intent"           => "Data::keyword",
-                "printer-resolution"               => "Data::resolution",
+                "presentation-direction-number-up" => "EtdSolutions\IPP\Data::keyword",
+                "print-color-mode"                 => "EtdSolutions\IPP\Data::keyword",
+                "print-content-optimize"           => "EtdSolutions\IPP\Data::keyword",
+                "print-quality"                    => "EtdSolutions\IPP\Data::enumeration",
+                "print-rendering-intent"           => "EtdSolutions\IPP\Data::keyword",
+                "printer-resolution"               => "EtdSolutions\IPP\Data::resolution",
                 "separator-sheets"                 => self::collection("Job Template", "separator-sheets"),
-                "sheet-collate"                    => "Data::keyword",
-                "sides"                            => "Data::keyword",
-                "x-image-position"                 => "Data::keyword",
-                "x-image-shift"                    => "Data::integer",
-                "x-side1-image-shift"              => "Data::integer",
-                "x-side2-image-shift"              => "Data::integer",
-                "y-image-position"                 => "Data::keyword",
-                "y-image-shift"                    => "Data::integer",
-                "y-side1-image-shift"              => "Data::integer",
-                "y-side2-image-shift"              => "Data::integer"
+                "sheet-collate"                    => "EtdSolutions\IPP\Data::keyword",
+                "sides"                            => "EtdSolutions\IPP\Data::keyword",
+                "x-image-position"                 => "EtdSolutions\IPP\Data::keyword",
+                "x-image-shift"                    => "EtdSolutions\IPP\Data::integer",
+                "x-side1-image-shift"              => "EtdSolutions\IPP\Data::integer",
+                "x-side2-image-shift"              => "EtdSolutions\IPP\Data::integer",
+                "y-image-position"                 => "EtdSolutions\IPP\Data::keyword",
+                "y-image-shift"                    => "EtdSolutions\IPP\Data::integer",
+                "y-side1-image-shift"              => "EtdSolutions\IPP\Data::integer",
+                "y-side2-image-shift"              => "EtdSolutions\IPP\Data::integer"
             ],
             "Event Notifications"      => [
-                "notify-subscribed-event" => "Data::keyword",
-                "notify-text"             => "Data::text",
+                "notify-subscribed-event" => "EtdSolutions\IPP\Data::keyword",
+                "notify-text"             => "EtdSolutions\IPP\Data::text",
             ],
             "Job Description"          => [
-                "attributes-charset"                      => "Data::charset",
-                "attributes-natural-language"             => "Data::naturalLanguage",
-                "compression-supplied"                    => "Data::keyword",
+                "attributes-charset"                      => "EtdSolutions\IPP\Data::charset",
+                "attributes-natural-language"             => "EtdSolutions\IPP\Data::naturalLanguage",
+                "compression-supplied"                    => "EtdSolutions\IPP\Data::keyword",
                 "copies-actual"                           => self::setof(self::integer(1, self::$MAX)),
                 "cover-back-actual"                       => self::setof(self::collection("Job Template", "cover-back")),
                 "cover-front-actual"                      => self::setof(self::collection("Job Template", "cover-front")),
-                "current-page-order"                      => "Data::keyword",
-                "date-time-at-completed"                  => self::underscore("Data::dateTime", "Data::novalue"),
-                "date-time-at-creation"                   => "Data::dateTime",
-                "date-time-at-processing"                 => self::underscore("Data::dateTime", "Data::novalue"),
-                "document-charset-supplied"               => "Data::charset",
-                "document-digital-signature-supplied"     => "Data::keyword",
+                "current-page-order"                      => "EtdSolutions\IPP\Data::keyword",
+                "date-time-at-completed"                  => self::underscore("EtdSolutions\IPP\Data::dateTime", "EtdSolutions\IPP\Data::novalue"),
+                "date-time-at-creation"                   => "EtdSolutions\IPP\Data::dateTime",
+                "date-time-at-processing"                 => self::underscore("EtdSolutions\IPP\Data::dateTime", "EtdSolutions\IPP\Data::novalue"),
+                "document-charset-supplied"               => "EtdSolutions\IPP\Data::charset",
+                "document-digital-signature-supplied"     => "EtdSolutions\IPP\Data::keyword",
                 "document-format-details-supplied"        => self::setof(self::collection("Operation", "document-format-details")),
-                "document-format-supplied"                => "Data::mimeMediaType",
+                "document-format-supplied"                => "EtdSolutions\IPP\Data::mimeMediaType",
                 "document-format-version-supplied"        => self::text(127),
-                "document-message-supplied"               => "Data::text",
-                "document-metadata"                       => self::setof("Data::octetString"),
-                "document-name-supplied"                  => "Data::name",
-                "document-natural-language-supplied"      => "Data::naturalLanguage",
-                "document-overrides-actual"               => self::setof("Data::collection"),
+                "document-message-supplied"               => "EtdSolutions\IPP\Data::text",
+                "document-metadata"                       => self::setof("EtdSolutions\IPP\Data::octetString"),
+                "document-name-supplied"                  => "EtdSolutions\IPP\Data::name",
+                "document-natural-language-supplied"      => "EtdSolutions\IPP\Data::naturalLanguage",
+                "document-overrides-actual"               => self::setof("EtdSolutions\IPP\Data::collection"),
                 "errors-count"                            => self::integer(0, self::$MAX),
-                "finishings-actual"                       => self::setof("Data::enumeration"),
+                "finishings-actual"                       => self::setof("EtdSolutions\IPP\Data::enumeration"),
                 "finishings-col-actual"                   => self::setof(self::collection("Job Template", "finishings-col")),
                 "force-front-side-actual"                 => self::setof(self::setof(self::integer(1, self::$MAX))),
-                "imposition-template-actual"              => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "imposition-template-actual"              => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "impressions-completed-current-copy"      => self::integer(0, self::$MAX),
                 "insert-sheet-actual"                     => self::setof(self::collection("Job Template", "insert-sheet")),
-                "job-account-id-actual"                   => self::setof("Data::name"),
+                "job-account-id-actual"                   => self::setof("EtdSolutions\IPP\Data::name"),
                 "job-accounting-sheets-actual"            => self::setof(self::collection("Job Template", "job-accounting-sheets")),
-                "job-accounting-user-id-actual"           => self::setof("Data::name"),
-                "job-attribute-fidelity"                  => "Data::boolean",
-                "job-collation-type"                      => "Data::enumeration",
-                "job-collation-type-actual"               => self::setof("Data::keyword"),
+                "job-accounting-user-id-actual"           => self::setof("EtdSolutions\IPP\Data::name"),
+                "job-attribute-fidelity"                  => "EtdSolutions\IPP\Data::boolean",
+                "job-collation-type"                      => "EtdSolutions\IPP\Data::enumeration",
+                "job-collation-type-actual"               => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "job-copies-actual"                       => self::setof(self::integer(1, self::$MAX)),
                 "job-cover-back-actual"                   => self::setof(self::collection("Job Template", "cover-back")),
                 "job-cover-front-actual"                  => self::setof(self::collection("Job Template", "cover-front")),
-                "job-detailed-status-messages"            => self::setof("Data::text"),
-                "job-document-access-errors"              => self::setof("Data::text"),
+                "job-detailed-status-messages"            => self::setof("EtdSolutions\IPP\Data::text"),
+                "job-document-access-errors"              => self::setof("EtdSolutions\IPP\Data::text"),
                 "job-error-sheet-actual"                  => self::setof(self::collection("Job Template", "job-error-sheet")),
-                "job-finishings-actual"                   => self::setof("Data::enumeration"),
+                "job-finishings-actual"                   => self::setof("EtdSolutions\IPP\Data::enumeration"),
                 "job-finishings-col-actual"               => self::setof(self::collection("Job Template", "media-col")),
-                "job-hold-until-actual"                   => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "job-hold-until-actual"                   => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "job-id"                                  => self::integer(1, self::$MAX),
                 "job-impressions"                         => self::integer(0, self::$MAX),
                 "job-impressions-completed"               => self::integer(0, self::$MAX),
                 "job-k-octets"                            => self::integer(0, self::$MAX),
                 "job-k-octets-processed"                  => self::integer(0, self::$MAX),
-                "job-mandatory-attributes"                => self::setof("Data::keyword"),
+                "job-mandatory-attributes"                => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "job-media-sheets"                        => self::integer(0, self::$MAX),
                 "job-media-sheets-completed"              => self::integer(0, self::$MAX),
                 "job-message-from-operator"               => self::text(127),
-                "job-message-to-operator-actual"          => self::setof("Data::text"),
-                "job-more-info"                           => "Data::uri",
-                "job-name"                                => "Data::name",
-                "job-originating-user-name"               => "Data::name",
-                "job-originating-user-uri"                => "Data::uri",
+                "job-message-to-operator-actual"          => self::setof("EtdSolutions\IPP\Data::text"),
+                "job-more-info"                           => "EtdSolutions\IPP\Data::uri",
+                "job-name"                                => "EtdSolutions\IPP\Data::name",
+                "job-originating-user-name"               => "EtdSolutions\IPP\Data::name",
+                "job-originating-user-uri"                => "EtdSolutions\IPP\Data::uri",
                 "job-pages"                               => self::integer(0, self::$MAX),
                 "job-pages-completed"                     => self::integer(0, self::$MAX),
                 "job-pages-completed-current-copy"        => self::integer(0, self::$MAX),
                 "job-printer-up-time"                     => self::integer(1, self::$MAX),
-                "job-printer-uri"                         => "Data::uri",
+                "job-printer-uri"                         => "EtdSolutions\IPP\Data::uri",
                 "job-priority-actual"                     => self::setof(self::integer(1, 100)),
                 "job-save-printer-make-and-model"         => self::text(127),
-                "job-sheet-message-actual"                => self::setof("Data::text"),
-                "job-sheets-actual"                       => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "job-sheet-message-actual"                => self::setof("EtdSolutions\IPP\Data::text"),
+                "job-sheets-actual"                       => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "job-sheets-col-actual"                   => self::setof(self::collection("Job Template", "job-sheets-col")),
-                "job-state"                               => self::underscore("Data::enumeration", unknown),
-                "job-state-message"                       => "Data::text",
-                "job-state-reasons"                       => self::setof("Data::keyword"),
-                "job-uri"                                 => "Data::uri",
+                "job-state"                               => self::underscore("EtdSolutions\IPP\Data::enumeration", "EtdSolutions\IPP\Data::unknown"),
+                "job-state-message"                       => "EtdSolutions\IPP\Data::text",
+                "job-state-reasons"                       => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "job-uri"                                 => "EtdSolutions\IPP\Data::uri",
                 "job-uuid"                                => self::uri(45),
-                "media-actual"                            => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "media-actual"                            => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "media-col-actual"                        => self::setof(self::collection("Job Template", "media-col")),
-                "media-input-tray-check-actual"           => self::setof(self::underscore("Data::keyword", "Data::name")),
-                "multiple-document-handling-actual"       => self::setof("Data::keyword"),
+                "media-input-tray-check-actual"           => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
+                "multiple-document-handling-actual"       => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "number-of-documents"                     => self::integer(0, self::$MAX),
                 "number-of-intervening-jobs"              => self::integer(0, self::$MAX),
                 "number-up-actual"                        => self::setof(self::integer(1, self::$MAX)),
-                "orientation-requested-actual"            => self::setof("Data::enumeration"),
-                "original-requesting-user-name"           => "Data::name",
-                "output-bin-actual"                       => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "orientation-requested-actual"            => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "original-requesting-user-name"           => "EtdSolutions\IPP\Data::name",
+                "output-bin-actual"                       => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "output-device-actual"                    => self::setof(self::name(127)),
                 "output-device-assigned"                  => self::name(127),
                 "overrides-actual"                        => self::setof(self::collection("Job Template", "overrides")),
-                "page-delivery-actual"                    => self::setof("Data::keyword"),
-                "page-order-received-actual"              => self::setof("Data::keyword"),
+                "page-delivery-actual"                    => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "page-order-received-actual"              => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "page-ranges-actual"                      => self::setof(self::rangeOfInteger(1, self::$MAX)),
-                "presentation-direction-number-up-actual" => self::setof("Data::keyword"),
-                "print-content-optimize-actual"           => self::setof("Data::keyword"),
-                "print-quality-actual"                    => self::setof("Data::enumeration"),
-                "printer-resolution-actual"               => self::setof(resolution),
+                "presentation-direction-number-up-actual" => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "print-content-optimize-actual"           => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "print-quality-actual"                    => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "printer-resolution-actual"               => self::setof("EtdSolutions\IPP\Data::resolution"),
                 "separator-sheets-actual"                 => self::setof(self::collection("Job Template", "separator-sheets")),
-                "sheet-collate-actual"                    => self::setof("Data::keyword"),
+                "sheet-collate-actual"                    => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "sheet-completed-copy-number"             => self::integer(0, self::$MAX),
                 "sheet-completed-document-number"         => self::integer(0, self::$MAX),
-                "sides-actual"                            => self::setof("Data::keyword"),
-                "time-at-completed"                       => self::underscore("Data::integer", "Data::novalue"),
-                "time-at-creation"                        => "Data::integer",
-                "time-at-processing"                      => self::underscore("Data::integer", "Data::novalue"),
+                "sides-actual"                            => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "time-at-completed"                       => self::underscore("EtdSolutions\IPP\Data::integer", "EtdSolutions\IPP\Data::novalue"),
+                "time-at-creation"                        => "EtdSolutions\IPP\Data::integer",
+                "time-at-processing"                      => self::underscore("EtdSolutions\IPP\Data::integer", "EtdSolutions\IPP\Data::novalue"),
                 "warnings-count"                          => self::integer(0, self::$MAX),
-                "x-image-position-actual"                 => self::setof("Data::keyword"),
-                "x-image-shift-actual"                    => self::setof("Data::integer"),
-                "x-side1-image-shift-actual"              => self::setof("Data::integer"),
-                "x-side2-image-shift-actual"              => self::setof("Data::integer"),
-                "y-image-position-actual"                 => self::setof("Data::keyword"),
-                "y-image-shift-actual"                    => self::setof("Data::integer"),
-                "y-side1-image-shift-actual"              => self::setof("Data::integer"),
-                "y-side2-image-shift-actual"              => self::setof("Data::integer")
+                "x-image-position-actual"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "x-image-shift-actual"                    => self::setof("EtdSolutions\IPP\Data::integer"),
+                "x-side1-image-shift-actual"              => self::setof("EtdSolutions\IPP\Data::integer"),
+                "x-side2-image-shift-actual"              => self::setof("EtdSolutions\IPP\Data::integer"),
+                "y-image-position-actual"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "y-image-shift-actual"                    => self::setof("EtdSolutions\IPP\Data::integer"),
+                "y-side1-image-shift-actual"              => self::setof("EtdSolutions\IPP\Data::integer"),
+                "y-side2-image-shift-actual"              => self::setof("EtdSolutions\IPP\Data::integer")
             ],
             "Job Template"             => [
                 "copies"                           => self::integer(1, self::$MAX),
                 "cover-back"                       => self::collection([
-                    "cover-type" => "Data::keyword",
-                    "media"      => self::underscore("Data::keyword", "Data::name"),
+                    "cover-type" => "EtdSolutions\IPP\Data::keyword",
+                    "media"      => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-col"  => self::collection("Job Template", "media-col")
                 ]),
                 "cover-front"                      => self::collection([
-                    "cover-type" => "Data::keyword",
-                    "media"      => self::underscore("Data::keyword", "Data::name"),
+                    "cover-type" => "EtdSolutions\IPP\Data::keyword",
+                    "media"      => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-col"  => self::collection("Job Template", "media-col")
                 ]),
-                "feed-orientation"                 => "Data::keyword",
-                "finishings"                       => self::setof("Data::enumeration"),
+                "feed-orientation"                 => "EtdSolutions\IPP\Data::keyword",
+                "finishings"                       => self::setof("EtdSolutions\IPP\Data::enumeration"),
                 "finishings-col"                   => self::collection([
-                    "finishing-template" => "Data::name",
+                    "finishing-template" => "EtdSolutions\IPP\Data::name",
                     "stitching"          => self::collection([
                         "stitching-locations"      => self::setof(self::integer(0, self::$MAX)),
                         "stitching-offset"         => self::integer(0, self::$MAX),
-                        "stitching-reference-edge" => "Data::keyword"
+                        "stitching-reference-edge" => "EtdSolutions\IPP\Data::keyword"
                     ])
                 ]),
-                "font-name-requested"              => "Data::name",
+                "font-name-requested"              => "EtdSolutions\IPP\Data::name",
                 "font-size-requested"              => self::integer(1, self::$MAX),
                 "force-front-side"                 => self::setof(self::integer(1, self::$MAX)),
-                "imposition-template"              => self::underscore("Data::keyword", "Data::name"),
+                "imposition-template"              => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                 "insert-sheet"                     => self::setof(self::collection([
                     "insert-after-page-number" => self::integer(0, self::$MAX),
                     "insert-count"             => self::integer(0, self::$MAX),
-                    "media"                    => self::underscore("Data::keyword", "Data::name"),
+                    "media"                    => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-col"                => self::collection("Job Template", "media-col")
                 ])),
-                "job-account-id"                   => "Data::name",
+                "job-account-id"                   => "EtdSolutions\IPP\Data::name",
                 "job-accounting-sheets"            => self::collection([
-                    "job-accounting-output-bin"  => self::underscore("Data::keyword", "Data::name"),
-                    "job-accounting-sheets-type" => self::underscore("Data::keyword", "Data::name"),
-                    "media"                      => self::underscore("Data::keyword", "Data::name"),
+                    "job-accounting-output-bin"  => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                    "job-accounting-sheets-type" => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                    "media"                      => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-col"                  => self::collection("Job Template", "media-col")
                 ]),
-                "job-accounting-user-id"           => "Data::name",
+                "job-accounting-user-id"           => "EtdSolutions\IPP\Data::name",
                 "job-copies"                       => self::integer(1, self::$MAX),
                 "job-cover-back"                   => self::collection("Job Template", "cover-back"),
                 "job-cover-front"                  => self::collection("Job Template", "cover-front"),
-                "job-delay-output-until"           => self::underscore("Data::keyword", "Data::name"),
-                "job-delay-output-until-time"      => "Data::dateTime",
-                "job-error-action"                 => "Data::keyword",
+                "job-delay-output-until"           => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                "job-delay-output-until-time"      => "EtdSolutions\IPP\Data::dateTime",
+                "job-error-action"                 => "EtdSolutions\IPP\Data::keyword",
                 "job-error-sheet"                  => self::collection([
-                    "job-error-sheet-type" => self::underscore("Data::keyword", "Data::name"),
-                    "job-error-sheet-when" => "Data::keyword",
-                    "media"                => self::underscore("Data::keyword", "Data::name"),
+                    "job-error-sheet-type" => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                    "job-error-sheet-when" => "EtdSolutions\IPP\Data::keyword",
+                    "media"                => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-col"            => self::collection("Job Template", "media-col")
                 ]),
-                "job-finishings"                   => self::setof("Data::enumeration"),
+                "job-finishings"                   => self::setof("EtdSolutions\IPP\Data::enumeration"),
                 "job-finishings-col"               => self::collection("Job Template", "finishings-col"),
-                "job-hold-until"                   => self::underscore("Data::keyword", "Data::name"),
-                "job-hold-until-time"              => "Data::dateTime",
-                "job-message-to-operator"          => "Data::text",
-                "job-phone-number"                 => "Data::uri",
+                "job-hold-until"                   => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                "job-hold-until-time"              => "EtdSolutions\IPP\Data::dateTime",
+                "job-message-to-operator"          => "EtdSolutions\IPP\Data::text",
+                "job-phone-number"                 => "EtdSolutions\IPP\Data::uri",
                 "job-priority"                     => self::integer(1, 100),
-                "job-recipient-name"               => "Data::name",
+                "job-recipient-name"               => "EtdSolutions\IPP\Data::name",
                 "job-save-disposition"             => self::collection([
-                    "save-disposition" => "Data::keyword",
+                    "save-disposition" => "EtdSolutions\IPP\Data::keyword",
                     "save-info"        => self::setof(self::collection([
-                        "save-document-format" => "Data::mimeMediaType",
-                        "save-location"        => "Data::uri",
-                        "save-name"            => "Data::name"
+                        "save-document-format" => "EtdSolutions\IPP\Data::mimeMediaType",
+                        "save-location"        => "EtdSolutions\IPP\Data::uri",
+                        "save-name"            => "EtdSolutions\IPP\Data::name"
                     ]))
                 ]),
-                "job-sheet-message"                => "Data::text",
-                "job-sheets"                       => self::underscore("Data::keyword", "Data::name"),
+                "job-sheet-message"                => "EtdSolutions\IPP\Data::text",
+                "job-sheets"                       => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                 "job-sheets-col"                   => self::collection([
-                    "job-sheets" => self::underscore("Data::keyword", "Data::name"),
-                    "media"      => self::underscore("Data::keyword", "Data::name"),
+                    "job-sheets" => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                    "media"      => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-col"  => self::collection("Job Template", "media-col")
                 ]),
-                "media"                            => self::underscore("Data::keyword", "Data::name"),
+                "media"                            => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                 "media-col"                        => self::collection([
-                    "media-back-coating"  => self::underscore("Data::keyword", "Data::name"),
+                    "media-back-coating"  => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-bottom-margin" => self::integer(0, self::$MAX),
-                    "media-color"         => self::underscore("Data::keyword", "Data::name"),
-                    "media-front-coating" => self::underscore("Data::keyword", "Data::name"),
-                    "media-grain"         => self::underscore("Data::keyword", "Data::name"),
+                    "media-color"         => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                    "media-front-coating" => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                    "media-grain"         => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-hole-count"    => self::integer(0, self::$MAX),
                     "media-info"          => self::text(255),
-                    "media-key"           => self::underscore("Data::keyword", "Data::name"),
+                    "media-key"           => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-left-margin"   => self::integer(0, self::$MAX),
                     "media-order-count"   => self::integer(1, self::$MAX),
-                    "media-pre-printed"   => self::underscore("Data::keyword", "Data::name"),
-                    "media-recycled"      => self::underscore("Data::keyword", "Data::name"),
+                    "media-pre-printed"   => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                    "media-recycled"      => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-right-margin"  => self::integer(0, self::$MAX),
                     "media-size"          => self::collection([
                         "x-dimension" => self::integer(0, self::$MAX),
                         "y-dimension" => self::integer(0, self::$MAX),
                     ]),
-                    "media-size-name"     => self::underscore("Data::keyword", "Data::name"),
-                    "media-source"        => self::underscore("Data::keyword", "Data::name"),
+                    "media-size-name"     => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                    "media-source"        => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-thickness"     => self::integer(1, self::$MAX),
-                    "media-tooth"         => self::underscore("Data::keyword", "Data::name"),
+                    "media-tooth"         => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-top-margin"    => self::integer(0, self::$MAX),
-                    "media-type"          => self::underscore("Data::keyword", "Data::name"),
+                    "media-type"          => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-weight-metric" => self::integer(0, self::$MAX)
                 ]),
-                "media-input-tray-check"           => self::underscore("Data::keyword", "Data::name"),
-                "multiple-document-handling"       => "Data::keyword",
+                "media-input-tray-check"           => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                "multiple-document-handling"       => "EtdSolutions\IPP\Data::keyword",
                 "number-up"                        => self::integer(1, self::$MAX),
-                "orientation-requested"            => "Data::enumeration",
-                "output-bin"                       => self::underscore("Data::keyword", "Data::name"),
+                "orientation-requested"            => "EtdSolutions\IPP\Data::enumeration",
+                "output-bin"                       => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                 "output-device"                    => self::name(127),
                 "overrides"                        => self::setof(self::collection([
 
                     //Any Job Template attribute (TODO)
-                    "document-copies"  => self::setof("Data::rangeOfInteger"),
-                    "document-numbers" => self::setof("Data::rangeOfInteger"),
-                    "pages"            => self::setof("Data::rangeOfInteger")
+                    "document-copies"  => self::setof("EtdSolutions\IPP\Data::rangeOfInteger"),
+                    "document-numbers" => self::setof("EtdSolutions\IPP\Data::rangeOfInteger"),
+                    "pages"            => self::setof("EtdSolutions\IPP\Data::rangeOfInteger")
                 ])),
-                "page-delivery"                    => "Data::keyword",
-                "page-order-received"              => "Data::keyword",
+                "page-delivery"                    => "EtdSolutions\IPP\Data::keyword",
+                "page-order-received"              => "EtdSolutions\IPP\Data::keyword",
                 "page-ranges"                      => self::setof(self::rangeOfInteger(1, self::$MAX)),
                 "pages-per-subset"                 => self::setof(self::integer(1, self::$MAX)),
                 "pdl-init-file"                    => self::collection([
-                    "pdl-init-file-entry"    => "Data::name",
-                    "pdl-init-file-location" => "Data::uri",
-                    "pdl-init-file-name"     => "Data::name"
+                    "pdl-init-file-entry"    => "EtdSolutions\IPP\Data::name",
+                    "pdl-init-file-location" => "EtdSolutions\IPP\Data::uri",
+                    "pdl-init-file-name"     => "EtdSolutions\IPP\Data::name"
                 ]),
-                "presentation-direction-number-up" => "Data::keyword",
-                "print-color-mode"                 => "Data::keyword",
-                "print-content-optimize"           => "Data::keyword",
-                "print-quality"                    => "Data::enumeration",
-                "print-rendering-intent"           => "Data::keyword",
-                "printer-resolution"               => "Data::resolution",
+                "presentation-direction-number-up" => "EtdSolutions\IPP\Data::keyword",
+                "print-color-mode"                 => "EtdSolutions\IPP\Data::keyword",
+                "print-content-optimize"           => "EtdSolutions\IPP\Data::keyword",
+                "print-quality"                    => "EtdSolutions\IPP\Data::enumeration",
+                "print-rendering-intent"           => "EtdSolutions\IPP\Data::keyword",
+                "printer-resolution"               => "EtdSolutions\IPP\Data::resolution",
                 "proof-print"                      => self::collection([
-                    "media"              => self::underscore("Data::keyword", "Data::name"),
+                    "media"              => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-col"          => self::collection("Job Template", "media-col"),
                     "proof-print-copies" => self::integer(0, self::$MAX)
                 ]),
                 "separator-sheets"                 => self::collection([
-                    "media"                 => self::underscore("Data::keyword", "Data::name"),
+                    "media"                 => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                     "media-col"             => self::collection("Job Template", "media-col"),
-                    "separator-sheets-type" => self::setof("Data::keyword")
+                    "separator-sheets-type" => self::setof("EtdSolutions\IPP\Data::keyword")
                 ]),
-                "sheet-collate"                    => "Data::keyword",
-                "sides"                            => "Data::keyword",
-                "x-image-position"                 => "Data::keyword",
-                "x-image-shift"                    => "Data::integer",
-                "x-side1-image-shift"              => "Data::integer",
-                "x-side2-image-shift"              => "Data::integer",
-                "y-image-position"                 => "Data::keyword",
-                "y-image-shift"                    => "Data::integer",
-                "y-side1-image-shift"              => "Data::integer",
-                "y-side2-image-shift"              => "Data::integer"
+                "sheet-collate"                    => "EtdSolutions\IPP\Data::keyword",
+                "sides"                            => "EtdSolutions\IPP\Data::keyword",
+                "x-image-position"                 => "EtdSolutions\IPP\Data::keyword",
+                "x-image-shift"                    => "EtdSolutions\IPP\Data::integer",
+                "x-side1-image-shift"              => "EtdSolutions\IPP\Data::integer",
+                "x-side2-image-shift"              => "EtdSolutions\IPP\Data::integer",
+                "y-image-position"                 => "EtdSolutions\IPP\Data::keyword",
+                "y-image-shift"                    => "EtdSolutions\IPP\Data::integer",
+                "y-side1-image-shift"              => "EtdSolutions\IPP\Data::integer",
+                "y-side2-image-shift"              => "EtdSolutions\IPP\Data::integer"
             ],
             "Operation"                => [
-                "attributes-charset"            => "Data::charset",
-                "attributes-natural-language"   => "Data::naturalLanguage",
-                "compression"                   => "Data::keyword",
-                "detailed-status-message"       => "Data::text",
-                "document-access-error"         => "Data::text",
-                "document-charset"              => "Data::charset",
-                "document-digital-signature"    => "Data::keyword",
-                "document-format"               => "Data::mimeMediaType",
+                "attributes-charset"            => "EtdSolutions\IPP\Data::charset",
+                "attributes-natural-language"   => "EtdSolutions\IPP\Data::naturalLanguage",
+                "compression"                   => "EtdSolutions\IPP\Data::keyword",
+                "detailed-status-message"       => "EtdSolutions\IPP\Data::text",
+                "document-access-error"         => "EtdSolutions\IPP\Data::text",
+                "document-charset"              => "EtdSolutions\IPP\Data::charset",
+                "document-digital-signature"    => "EtdSolutions\IPP\Data::keyword",
+                "document-format"               => "EtdSolutions\IPP\Data::mimeMediaType",
                 "document-format-details"       => self::setof(self::collection([
-                    "document-format"                     => "Data::mimeMediaType",
+                    "document-format"                     => "EtdSolutions\IPP\Data::mimeMediaType",
                     "document-format-device-id"           => self::text(127),
                     "document-format-version"             => self::text(127),
-                    "document-natural-language"           => self::setof("Data::naturalLanguage"),
-                    "document-source-application-name"    => "Data::name",
+                    "document-natural-language"           => self::setof("EtdSolutions\IPP\Data::naturalLanguage"),
+                    "document-source-application-name"    => "EtdSolutions\IPP\Data::name",
                     "document-source-application-version" => self::text(127),
                     "document-source-os-name"             => self::name(40),
                     "document-source-os-version"          => self::text(40)
                 ])),
-                "document-message"              => "Data::text",
-                "document-metadata"             => self::setof("Data::octetString"),
-                "document-name"                 => "Data::name",
-                "document-natural-language"     => "Data::naturalLanguage",
-                "document-password"             => "Data::octetString",
-                "document-uri"                  => "Data::uri",
+                "document-message"              => "EtdSolutions\IPP\Data::text",
+                "document-metadata"             => self::setof("EtdSolutions\IPP\Data::octetString"),
+                "document-name"                 => "EtdSolutions\IPP\Data::name",
+                "document-natural-language"     => "EtdSolutions\IPP\Data::naturalLanguage",
+                "document-password"             => "EtdSolutions\IPP\Data::octetString",
+                "document-uri"                  => "EtdSolutions\IPP\Data::uri",
                 "first-index"                   => self::integer(1, self::$MAX),
-                "identify-actions"              => self::setof("Data::keyword"),
-                "ipp-attribute-fidelity"        => "Data::boolean",
-                "job-hold-until"                => self::underscore("Data::keyword", "Data::name"),
+                "identify-actions"              => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "ipp-attribute-fidelity"        => "EtdSolutions\IPP\Data::boolean",
+                "job-hold-until"                => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
                 "job-id"                        => self::integer(1, self::$MAX),
                 "job-ids"                       => self::setof(self::integer(1, self::$MAX)),
                 "job-impressions"               => self::integer(0, self::$MAX),
                 "job-k-octets"                  => self::integer(0, self::$MAX),
-                "job-mandatory-attributes"      => self::setof("Data::keyword"),
+                "job-mandatory-attributes"      => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "job-media-sheets"              => self::integer(0, self::$MAX),
                 "job-message-from-operator"     => self::text(127),
-                "job-name"                      => "Data::name",
+                "job-name"                      => "EtdSolutions\IPP\Data::name",
                 "job-password"                  => self::octetString(255),
-                "job-password-encryption"       => self::underscore("Data::keyword", "Data::name"),
-                "job-state"                     => "Data::enumeration",
-                "job-state-message"             => "Data::text",
-                "job-state-reasons"             => self::setof("Data::keyword"),
-                "job-uri"                       => "Data::uri",
-                "last-document"                 => "Data::boolean",
+                "job-password-encryption"       => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                "job-state"                     => "EtdSolutions\IPP\Data::enumeration",
+                "job-state-message"             => "EtdSolutions\IPP\Data::text",
+                "job-state-reasons"             => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "job-uri"                       => "EtdSolutions\IPP\Data::uri",
+                "last-document"                 => "EtdSolutions\IPP\Data::boolean",
                 "limit"                         => self::integer(1, self::$MAX),
                 "message"                       => self::text(127),
-                "my-jobs"                       => "Data::boolean",
-                "original-requesting-user-name" => "Data::name",
-                "preferred-attributes"          => "Data::collection",
+                "my-jobs"                       => "EtdSolutions\IPP\Data::boolean",
+                "original-requesting-user-name" => "EtdSolutions\IPP\Data::name",
+                "preferred-attributes"          => "EtdSolutions\IPP\Data::collection",
                 "printer-message-from-operator" => self::text(127),
-                "printer-uri"                   => "Data::uri",
-                "requested-attributes"          => self::setof("Data::keyword"),
-                "requesting-user-name"          => "Data::name",
-                "requesting-user-uri"           => "Data::uri",
+                "printer-uri"                   => "EtdSolutions\IPP\Data::uri",
+                "requested-attributes"          => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "requesting-user-name"          => "EtdSolutions\IPP\Data::name",
+                "requesting-user-uri"           => "EtdSolutions\IPP\Data::uri",
                 "status-message"                => self::text(255),
-                "which-jobs"                    => "Data::keyword"
+                "which-jobs"                    => "EtdSolutions\IPP\Data::keyword"
             ],
             "Printer Description"      => [
-                "charset-configured"                         => "Data::charset",
-                "charset-supported"                          => self::setof("Data::charset"),
-                "color-supported"                            => "Data::boolean",
-                "compression-supported"                      => self::setof("Data::keyword"),
+                "charset-configured"                         => "EtdSolutions\IPP\Data::charset",
+                "charset-supported"                          => self::setof("EtdSolutions\IPP\Data::charset"),
+                "color-supported"                            => "EtdSolutions\IPP\Data::boolean",
+                "compression-supported"                      => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "copies-default"                             => self::integer(1, self::$MAX),
                 "copies-supported"                           => self::rangeOfInteger(1, self::$MAX),
                 "cover-back-default"                         => self::collection("Job Template", "cover-back"),
-                "cover-back-supported"                       => self::setof("Data::keyword"),
+                "cover-back-supported"                       => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "cover-front-default"                        => self::collection("Job Template", "cover-front"),
-                "cover-front-supported"                      => self::setof("Data::keyword"),
+                "cover-front-supported"                      => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "device-service-count"                       => self::integer(1, self::$MAX),
                 "device-uuid"                                => self::uri(45),
-                "document-charset-default"                   => "Data::charset",
-                "document-charset-supported"                 => self::setof("Data::charset"),
-                "document-creation-attributes-supported"     => self::setof("Data::keyword"),
-                "document-digital-signature-default"         => "Data::keyword",
-                "document-digital-signature-supported"       => self::setof("Data::keyword"),
-                "document-format-default"                    => "Data::mimeMediaType",
+                "document-charset-default"                   => "EtdSolutions\IPP\Data::charset",
+                "document-charset-supported"                 => self::setof("EtdSolutions\IPP\Data::charset"),
+                "document-creation-attributes-supported"     => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "document-digital-signature-default"         => "EtdSolutions\IPP\Data::keyword",
+                "document-digital-signature-supported"       => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "document-format-default"                    => "EtdSolutions\IPP\Data::mimeMediaType",
                 "document-format-details-default"            => self::collection("Operation", "document-format-details"),
-                "document-format-details-supported"          => self::setof("Data::keyword"),
-                "document-format-supported"                  => self::setof("Data::mimeMediaType"),
-                "document-format-varying-attributes"         => self::setof("Data::keyword"),
+                "document-format-details-supported"          => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "document-format-supported"                  => self::setof("EtdSolutions\IPP\Data::mimeMediaType"),
+                "document-format-varying-attributes"         => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "document-format-version-default"            => self::text(127),
                 "document-format-version-supported"          => self::setof(self::text(127)),
-                "document-natural-language-default"          => "Data::naturalLanguage",
-                "document-natural-language-supported"        => self::setof("Data::naturalLanguage"),
+                "document-natural-language-default"          => "EtdSolutions\IPP\Data::naturalLanguage",
+                "document-natural-language-supported"        => self::setof("EtdSolutions\IPP\Data::naturalLanguage"),
                 "document-password-supported"                => self::integer(0, 1023),
-                "feed-orientation-default"                   => "Data::keyword",
-                "feed-orientation-supported"                 => "Data::keyword",
+                "feed-orientation-default"                   => "EtdSolutions\IPP\Data::keyword",
+                "feed-orientation-supported"                 => "EtdSolutions\IPP\Data::keyword",
                 "finishings-col-default"                     => self::collection("Job Template", "finishings-col"),
                 "finishings-col-ready"                       => self::setof(self::collection("Job Template", "finishings-col")),
-                "finishings-col-supported"                   => self::setof("Data::keyword"),
-                "finishings-default"                         => self::setof("Data::enumeration"),
-                "finishings-ready"                           => self::setof("Data::enumeration"),
-                "finishings-supported"                       => self::setof("Data::enumeration"),
-                "font-name-requested-default"                => "Data::name",
-                "font-name-requested-supported"              => self::setof("Data::name"),
+                "finishings-col-supported"                   => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "finishings-default"                         => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "finishings-ready"                           => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "finishings-supported"                       => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "font-name-requested-default"                => "EtdSolutions\IPP\Data::name",
+                "font-name-requested-supported"              => self::setof("EtdSolutions\IPP\Data::name"),
                 "font-size-requested-default"                => self::integer(1, self::$MAX),
                 "font-size-requested-supported"              => self::setof(self::rangeOfInteger(1, self::$MAX)),
                 "force-front-side-default (under review)"    => self::setof(self::integer(1, self::$MAX)),
                 "force-front-side-supported (under review)"  => self::rangeOfInteger(1, self::$MAX),
-                "generated-natural-language-supported"       => self::setof("Data::naturalLanguage"),
-                "identify-actions-default"                   => self::setof("Data::keyword"),
-                "identify-actions-supported"                 => self::setof("Data::keyword"),
-                "imposition-template-default"                => self::underscore("Data::keyword", "Data::name"),
-                "imposition-template-supported"              => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "generated-natural-language-supported"       => self::setof("EtdSolutions\IPP\Data::naturalLanguage"),
+                "identify-actions-default"                   => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "identify-actions-supported"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "imposition-template-default"                => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                "imposition-template-supported"              => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "insert-after-page-number-supported"         => self::rangeOfInteger(0, self::$MAX),
                 "insert-count-supported"                     => self::rangeOfInteger(0, self::$MAX),
                 "insert-sheet-default"                       => self::setof(self::collection("Job Template", "insert-sheet")),
-                "insert-sheet-supported"                     => self::setof("Data::keyword"),
-                "ipp-features-supported"                     => self::setof("Data::keyword"),
-                "ipp-versions-supported"                     => self::setof("Data::keyword"),
+                "insert-sheet-supported"                     => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "ipp-features-supported"                     => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "ipp-versions-supported"                     => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "ippget-event-life"                          => self::integer(15, self::$MAX),
-                "job-account-id-default"                     => self::underscore("Data::name", "Data::novalue"),
-                "job-account-id-supported"                   => "Data::boolean",
-                "job-accounting-sheets-default"              => self::underscore(self::collection("Job Template", "job-accounting-sheets"), "Data::novalue"),
-                "job-accounting-sheets-supported"            => self::setof("Data::keyword"),
-                "job-accounting-user-id-default"             => self::underscore("Data::name", "Data::novalue"),
-                "job-accounting-user-id-supported"           => "Data::boolean",
-                "job-constraints-supported"                  => self::setof("Data::collection"),
+                "job-account-id-default"                     => self::underscore("EtdSolutions\IPP\Data::name", "EtdSolutions\IPP\Data::novalue"),
+                "job-account-id-supported"                   => "EtdSolutions\IPP\Data::boolean",
+                "job-accounting-sheets-default"              => self::underscore(self::collection("Job Template", "job-accounting-sheets"), "EtdSolutions\IPP\Data::novalue"),
+                "job-accounting-sheets-supported"            => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "job-accounting-user-id-default"             => self::underscore("EtdSolutions\IPP\Data::name", "EtdSolutions\IPP\Data::novalue"),
+                "job-accounting-user-id-supported"           => "EtdSolutions\IPP\Data::boolean",
+                "job-constraints-supported"                  => self::setof("EtdSolutions\IPP\Data::collection"),
                 "job-copies-default"                         => self::integer(1, self::$MAX),
                 "job-copies-supported"                       => self::rangeOfInteger(1, self::$MAX),
                 "job-cover-back-default"                     => self::collection("Job Template", "cover-back"),
-                "job-cover-back-supported"                   => self::setof("Data::keyword"),
+                "job-cover-back-supported"                   => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "job-cover-front-default"                    => self::collection("Job Template", "cover-front"),
-                "job-cover-front-supported"                  => self::setof("Data::keyword"),
-                "job-creation-attributes-supported"          => self::setof("Data::keyword"),
-                "job-delay-output-until-default"             => self::underscore("Data::keyword", "Data::name"),
-                "job-delay-output-until-supported"           => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "job-cover-front-supported"                  => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "job-creation-attributes-supported"          => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "job-delay-output-until-default"             => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                "job-delay-output-until-supported"           => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "job-delay-output-until-time-supported"      => self::rangeOfInteger(0, self::$MAX),
-                "job-error-action-default"                   => "Data::keyword",
-                "job-error-action-supported"                 => self::setof("Data::keyword"),
-                "job-error-sheet-default"                    => self::underscore(self::collection("Job Template", "job-error-sheet"), "Data::novalue"),
-                "job-error-sheet-supported"                  => self::setof("Data::keyword"),
+                "job-error-action-default"                   => "EtdSolutions\IPP\Data::keyword",
+                "job-error-action-supported"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "job-error-sheet-default"                    => self::underscore(self::collection("Job Template", "job-error-sheet"), "EtdSolutions\IPP\Data::novalue"),
+                "job-error-sheet-supported"                  => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "job-finishings-col-default"                 => self::collection("Job Template", "finishings-col"),
                 "job-finishings-col-ready"                   => self::setof(self::collection("Job Template", "finishings-col")),
-                "job-finishings-col-supported"               => self::setof("Data::keyword"),
-                "job-finishings-default"                     => self::setof("Data::enumeration"),
-                "job-finishings-ready"                       => self::setof("Data::enumeration"),
-                "job-finishings-supported"                   => self::setof("Data::enumeration"),
-                "job-hold-until-default"                     => self::underscore("Data::keyword", "Data::name"),
-                "job-hold-until-supported"                   => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "job-finishings-col-supported"               => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "job-finishings-default"                     => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "job-finishings-ready"                       => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "job-finishings-supported"                   => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "job-hold-until-default"                     => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                "job-hold-until-supported"                   => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "job-hold-until-time-supported"              => self::rangeOfInteger(0, self::$MAX),
-                "job-ids-supported"                          => "Data::boolean",
+                "job-ids-supported"                          => "EtdSolutions\IPP\Data::boolean",
                 "job-impressions-supported"                  => self::rangeOfInteger(0, self::$MAX),
                 "job-k-octets-supported"                     => self::rangeOfInteger(0, self::$MAX),
                 "job-media-sheets-supported"                 => self::rangeOfInteger(0, self::$MAX),
-                "job-message-to-operator-default"            => "Data::text",
-                "job-message-to-operator-supported"          => "Data::boolean",
-                "job-password-encryption-supported"          => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "job-message-to-operator-default"            => "EtdSolutions\IPP\Data::text",
+                "job-message-to-operator-supported"          => "EtdSolutions\IPP\Data::boolean",
+                "job-password-encryption-supported"          => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "job-password-supported"                     => self::integer(0, 255),
-                "job-phone-number-default"                   => self::underscore("Data::uri", "Data::novalue"),
-                "job-phone-number-supported"                 => "Data::boolean",
+                "job-phone-number-default"                   => self::underscore("EtdSolutions\IPP\Data::uri", "EtdSolutions\IPP\Data::novalue"),
+                "job-phone-number-supported"                 => "EtdSolutions\IPP\Data::boolean",
                 "job-priority-default"                       => self::integer(1, 100),
                 "job-priority-supported"                     => self::integer(1, 100),
-                "job-recipient-name-default"                 => self::underscore("Data::name", "Data::novalue"),
-                "job-recipient-name-supported"               => "Data::boolean",
+                "job-recipient-name-default"                 => self::underscore("EtdSolutions\IPP\Data::name", "EtdSolutions\IPP\Data::novalue"),
+                "job-recipient-name-supported"               => "EtdSolutions\IPP\Data::boolean",
                 "job-resolvers-supported"                    => self::setof(self::collection([
-                    "resolver-name" => "Data::name"
+                    "resolver-name" => "EtdSolutions\IPP\Data::name"
                 ])),
-                "job-settable-attributes-supported"          => self::setof("Data::keyword"),
-                "job-sheet-message-default"                  => "Data::text",
-                "job-sheet-message-supported"                => "Data::boolean",
+                "job-settable-attributes-supported"          => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "job-sheet-message-default"                  => "EtdSolutions\IPP\Data::text",
+                "job-sheet-message-supported"                => "EtdSolutions\IPP\Data::boolean",
                 "job-sheets-col-default"                     => self::collection("Job Template", "job-sheets-col"),
-                "job-sheets-col-supported"                   => self::setof("Data::keyword"),
-                "job-sheets-default"                         => self::underscore("Data::keyword", "Data::name"),
-                "job-sheets-supported"                       => self::setof(self::underscore("Data::keyword", "Data::name")),
-                "job-spooling-supported"                     => "Data::keyword",
+                "job-sheets-col-supported"                   => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "job-sheets-default"                         => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                "job-sheets-supported"                       => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
+                "job-spooling-supported"                     => "EtdSolutions\IPP\Data::keyword",
                 "max-save-info-supported"                    => self::integer(1, self::$MAX),
                 "max-stitching-locations-supported"          => self::integer(1, self::$MAX),
-                "media-back-coating-supported"               => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "media-back-coating-supported"               => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "media-bottom-margin-supported"              => self::setof(self::integer(0, self::$MAX)),
                 "media-col-database"                         => self::setof(self::collection([
                     //TODO=> Member attributes are the same as the
                     // "media-col" Job Template attribute
                     "media-source-properties" => self::collection([
-                        "media-source-feed-direction"   => "Data::keyword",
-                        "media-source-feed-orientation" => "Data::enumeration"
+                        "media-source-feed-direction"   => "EtdSolutions\IPP\Data::keyword",
+                        "media-source-feed-orientation" => "EtdSolutions\IPP\Data::enumeration"
                     ])
                 ])),
                 "media-col-default"                          => self::collection("Job Template", "media-col"),
@@ -888,208 +915,220 @@ class Data {
                     //TODO=> Member attributes are the same as the
                     // "media-col" Job Template attribute
                     "media-source-properties" => self::collection([
-                        "media-source-feed-direction"   => "Data::keyword",
-                        "media-source-feed-orientation" => "Data::enumeration"
+                        "media-source-feed-direction"   => "EtdSolutions\IPP\Data::keyword",
+                        "media-source-feed-orientation" => "EtdSolutions\IPP\Data::enumeration"
                     ])
                 ])),
-                "media-col-supported"                        => self::setof("Data::keyword"),
-                "media-color-supported"                      => self::setof(self::underscore("Data::keyword", "Data::name")),
-                "media-default"                              => self::underscore("Data::keyword", "Data::name", "Data::novalue"),
-                "media-front-coating-supported"              => self::setof(self::underscore("Data::keyword", "Data::name")),
-                "media-grain-supported"                      => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "media-col-supported"                        => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "media-color-supported"                      => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
+                "media-default"                              => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name", "EtdSolutions\IPP\Data::novalue"),
+                "media-front-coating-supported"              => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
+                "media-grain-supported"                      => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "media-hole-count-supported"                 => self::setof(self::rangeOfInteger(0, self::$MAX)),
-                "media-info-supported"                       => "Data::boolean",
-                "media-input-tray-check-default"             => self::underscore("Data::keyword", "Data::name", "Data::novalue"),
-                "media-input-tray-check-supported"           => self::setof(self::underscore("Data::keyword", "Data::name")),
-                "media-key-supported"                        => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "media-info-supported"                       => "EtdSolutions\IPP\Data::boolean",
+                "media-input-tray-check-default"             => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name", "EtdSolutions\IPP\Data::novalue"),
+                "media-input-tray-check-supported"           => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
+                "media-key-supported"                        => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "media-left-margin-supported"                => self::setof(self::integer(0, self::$MAX)),
                 "media-order-count-supported"                => self::setof(self::rangeOfInteger(1, self::$MAX)),
-                "media-pre-printed-supported"                => self::setof(self::underscore("Data::keyword", "Data::name")),
-                "media-ready"                                => self::setof(self::underscore("Data::keyword", "Data::name")),
-                "media-recycled-supported"                   => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "media-pre-printed-supported"                => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
+                "media-ready"                                => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
+                "media-recycled-supported"                   => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "media-right-margin-supported"               => self::setof(self::integer(0, self::$MAX)),
                 "media-size-supported"                       => self::setof(self::collection([
                     "x-dimension" => self::underscore(self::integer(1, self::$MAX), self::rangeOfInteger(1, self::$MAX)),
                     "y-dimension" => self::underscore(self::integer(1, self::$MAX), self::rangeOfInteger(1, self::$MAX))
                 ])),
-                "media-source-supported"                     => self::setof(self::underscore("Data::keyword", "Data::name")),
-                "media-supported"                            => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "media-source-supported"                     => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
+                "media-supported"                            => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "media-thickness-supported"                  => self::rangeOfInteger(1, self::$MAX),
-                "media-tooth-supported"                      => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "media-tooth-supported"                      => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "media-top-margin-supported"                 => self::setof(self::integer(0, self::$MAX)),
-                "media-type-supported"                       => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "media-type-supported"                       => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "media-weight-metric-supported"              => self::setof(self::rangeOfInteger(0, self::$MAX)),
-                "multiple-document-handling-default"         => "Data::keyword",
-                "multiple-document-handling-supported"       => self::setof("Data::keyword"),
-                "multiple-document-jobs-supported"           => "Data::boolean",
+                "multiple-document-handling-default"         => "EtdSolutions\IPP\Data::keyword",
+                "multiple-document-handling-supported"       => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "multiple-document-jobs-supported"           => "EtdSolutions\IPP\Data::boolean",
                 "multiple-operation-time-out"                => self::integer(1, self::$MAX),
-                "multiple-operation-timeout-action"          => "Data::keyword",
-                "natural-language-configured"                => "Data::naturalLanguage",
+                "multiple-operation-timeout-action"          => "EtdSolutions\IPP\Data::keyword",
+                "natural-language-configured"                => "EtdSolutions\IPP\Data::naturalLanguage",
                 "number-up-default"                          => self::integer(1, self::$MAX),
                 "number-up-supported"                        => self::underscore(self::integer(1, self::$MAX), self::rangeOfInteger(1, self::$MAX)),
-                "operations-supported"                       => self::setof("Data::enumeration"),
-                "orientation-requested-default"              => self::underscore("Data::novalue", "Data::enumeration"),
-                "orientation-requested-supported"            => self::setof("Data::enumeration"),
-                "output-bin-default"                         => self::underscore("Data::keyword", "Data::name"),
-                "output-bin-supported"                       => self::setof(self::underscore("Data::keyword", "Data::name")),
+                "operations-supported"                       => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "orientation-requested-default"              => self::underscore("EtdSolutions\IPP\Data::novalue", "EtdSolutions\IPP\Data::enumeration"),
+                "orientation-requested-supported"            => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "output-bin-default"                         => self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name"),
+                "output-bin-supported"                       => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
                 "output-device-supported"                    => self::setof(self::name(127)),
-                "overrides-supported"                        => self::setof("Data::keyword"),
-                "page-delivery-default"                      => "Data::keyword",
-                "page-delivery-supported"                    => self::setof("Data::keyword"),
-                "page-order-received-default"                => "Data::keyword",
-                "page-order-received-supported"              => self::setof("Data::keyword"),
-                "page-ranges-supported"                      => "Data::boolean",
+                "overrides-supported"                        => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "page-delivery-default"                      => "EtdSolutions\IPP\Data::keyword",
+                "page-delivery-supported"                    => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "page-order-received-default"                => "EtdSolutions\IPP\Data::keyword",
+                "page-order-received-supported"              => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "page-ranges-supported"                      => "EtdSolutions\IPP\Data::boolean",
                 "pages-per-minute"                           => self::integer(0, self::$MAX),
                 "pages-per-minute-color"                     => self::integer(0, self::$MAX),
-                "pages-per-subset-supported"                 => "Data::boolean",
-                "parent-printers-supported"                  => self::setof("Data::uri"),
-                "pdl-init-file-default"                      => self::underscore(self::collection("Job Template", "pdl-init-file"), "Data::novalue"),
-                "pdl-init-file-entry-supported"              => self::setof("Data::name"),
-                "pdl-init-file-location-supported"           => self::setof("Data::uri"),
-                "pdl-init-file-name-subdirectory-supported"  => "Data::boolean",
-                "pdl-init-file-name-supported"               => self::setof("Data::name"),
-                "pdl-init-file-supported"                    => self::setof("Data::keyword"),
-                "pdl-override-supported"                     => "Data::keyword",
-                "preferred-attributes-supported"             => "Data::boolean",
-                "presentation-direction-number-up-default"   => "Data::keyword",
-                "presentation-direction-number-up-supported" => self::setof("Data::keyword"),
-                "print-color-mode-default"                   => "Data::keyword",
-                "print-color-mode-supported"                 => self::setof("Data::keyword"),
-                "print-content-optimize-default"             => "Data::keyword",
-                "print-content-optimize-supported"           => self::setof("Data::keyword"),
-                "print-quality-default"                      => "Data::enumeration",
-                "print-quality-supported"                    => self::setof("Data::enumeration"),
-                "print-rendering-intent-default"             => "Data::keyword",
-                "print-rendering-intent-supported"           => self::setof("Data::keyword"),
-                "printer-alert"                              => self::setof("Data::octetString"),
-                "printer-alert-description"                  => self::setof("Data::text"),
-                "printer-charge-info"                        => "Data::text",
-                "printer-charge-info-uri"                    => "Data::uri",
-                "printer-current-time"                       => "Data::dateTime",
-                "printer-detailed-status-messages"           => self::setof("Data::text"),
+                "pages-per-subset-supported"                 => "EtdSolutions\IPP\Data::boolean",
+                "parent-printers-supported"                  => self::setof("EtdSolutions\IPP\Data::uri"),
+                "pdl-init-file-default"                      => self::underscore(self::collection("Job Template", "pdl-init-file"), "EtdSolutions\IPP\Data::novalue"),
+                "pdl-init-file-entry-supported"              => self::setof("EtdSolutions\IPP\Data::name"),
+                "pdl-init-file-location-supported"           => self::setof("EtdSolutions\IPP\Data::uri"),
+                "pdl-init-file-name-subdirectory-supported"  => "EtdSolutions\IPP\Data::boolean",
+                "pdl-init-file-name-supported"               => self::setof("EtdSolutions\IPP\Data::name"),
+                "pdl-init-file-supported"                    => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "pdl-override-supported"                     => "EtdSolutions\IPP\Data::keyword",
+                "preferred-attributes-supported"             => "EtdSolutions\IPP\Data::boolean",
+                "presentation-direction-number-up-default"   => "EtdSolutions\IPP\Data::keyword",
+                "presentation-direction-number-up-supported" => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "print-color-mode-default"                   => "EtdSolutions\IPP\Data::keyword",
+                "print-color-mode-supported"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "print-content-optimize-default"             => "EtdSolutions\IPP\Data::keyword",
+                "print-content-optimize-supported"           => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "print-quality-default"                      => "EtdSolutions\IPP\Data::enumeration",
+                "print-quality-supported"                    => self::setof("EtdSolutions\IPP\Data::enumeration"),
+                "print-rendering-intent-default"             => "EtdSolutions\IPP\Data::keyword",
+                "print-rendering-intent-supported"           => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "printer-alert"                              => self::setof("EtdSolutions\IPP\Data::octetString"),
+                "printer-alert-description"                  => self::setof("EtdSolutions\IPP\Data::text"),
+                "printer-charge-info"                        => "EtdSolutions\IPP\Data::text",
+                "printer-charge-info-uri"                    => "EtdSolutions\IPP\Data::uri",
+                "printer-current-time"                       => "EtdSolutions\IPP\Data::dateTime",
+                "printer-detailed-status-messages"           => self::setof("EtdSolutions\IPP\Data::text"),
                 "printer-device-id"                          => self::text(1023),
-                "printer-driver-installer"                   => "Data::uri",
-                "printer-geo-location"                       => "Data::uri",
-                "printer-get-attributes-supported"           => self::setof("Data::keyword"),
+                "printer-driver-installer"                   => "EtdSolutions\IPP\Data::uri",
+                "printer-geo-location"                       => "EtdSolutions\IPP\Data::uri",
+                "printer-get-attributes-supported"           => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "printer-icc-profiles"                       => self::setof(self::collection([
-                    "xri-authentication" => "Data::name",
-                    "profile-url"        => uri
+                    "xri-authentication" => "EtdSolutions\IPP\Data::name",
+                    "profile-url"        => "EtdSolutions\IPP\Data::uri"
                 ])),
-                "printer-icons"                              => self::setof("Data::uri"),
+                "printer-icons"                              => self::setof("EtdSolutions\IPP\Data::uri"),
                 "printer-info"                               => self::text(127),
-                "printer-is-accepting-jobs"                  => "Data::boolean",
+                "printer-is-accepting-jobs"                  => "EtdSolutions\IPP\Data::boolean",
                 "printer-location"                           => self::text(127),
                 "printer-make-and-model"                     => self::text(127),
-                "printer-mandatory-job-attributes"           => self::setof("Data::keyword"),
-                "printer-message-date-time"                  => "Data::dateTime",
+                "printer-mandatory-job-attributes"           => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "printer-message-date-time"                  => "EtdSolutions\IPP\Data::dateTime",
                 "printer-message-from-operator"              => self::text(127),
-                "printer-message-time"                       => "Data::integer",
-                "printer-more-info"                          => "Data::uri",
-                "printer-more-info-manufacturer"             => "Data::uri",
+                "printer-message-time"                       => "EtdSolutions\IPP\Data::integer",
+                "printer-more-info"                          => "EtdSolutions\IPP\Data::uri",
+                "printer-more-info-manufacturer"             => "EtdSolutions\IPP\Data::uri",
                 "printer-name"                               => self::name(127),
-                "printer-organization"                       => self::setof("Data::text"),
-                "printer-organizational-unit"                => self::setof("Data::text"),
-                "printer-resolution-default"                 => "Data::resolution",
-                "printer-resolution-supported"               => "Data::resolution",
-                "printer-settable-attributes-supported"      => self::setof("Data::keyword"),
-                "printer-state"                              => "Data::enumeration",
-                "printer-state-change-date-time"             => "Data::dateTime",
+                "printer-organization"                       => self::setof("EtdSolutions\IPP\Data::text"),
+                "printer-organizational-unit"                => self::setof("EtdSolutions\IPP\Data::text"),
+                "printer-resolution-default"                 => "EtdSolutions\IPP\Data::resolution",
+                "printer-resolution-supported"               => "EtdSolutions\IPP\Data::resolution",
+                "printer-settable-attributes-supported"      => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "printer-state"                              => "EtdSolutions\IPP\Data::enumeration",
+                "printer-state-change-date-time"             => "EtdSolutions\IPP\Data::dateTime",
                 "printer-state-change-time"                  => self::integer(1, self::$MAX),
-                "printer-state-message"                      => "Data::text",
-                "printer-state-reasons"                      => self::setof("Data::keyword"),
-                "printer-supply"                             => self::setof("Data::octetString"),
-                "printer-supply-description"                 => self::setof("Data::text"),
-                "printer-supply-info-uri"                    => "Data::uri",
+                "printer-state-message"                      => "EtdSolutions\IPP\Data::text",
+                "printer-state-reasons"                      => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "printer-supply"                             => self::setof("EtdSolutions\IPP\Data::octetString"),
+                "printer-supply-description"                 => self::setof("EtdSolutions\IPP\Data::text"),
+                "printer-supply-info-uri"                    => "EtdSolutions\IPP\Data::uri",
                 "printer-up-time"                            => self::integer(1, self::$MAX),
-                "printer-uri-supported"                      => self::setof("Data::uri"),
+                "printer-uri-supported"                      => self::setof("EtdSolutions\IPP\Data::uri"),
                 "printer-uuid"                               => self::uri(45),
                 "printer-xri-supported"                      => self::setof(self::collection([
-                    "xri-authentication" => "Data::keyword",
-                    "xri-security"       => "Data::keyword",
-                    "xri-uri"            => uri
+                    "xri-authentication" => "EtdSolutions\IPP\Data::keyword",
+                    "xri-security"       => "EtdSolutions\IPP\Data::keyword",
+                    "xri-uri"            => "EtdSolutions\IPP\Data::uri"
                 ])),
-                "proof-print-default"                        => self::underscore(self::collection("Job Template", "proof-print"), "Data::novalue"),
-                "proof-print-supported"                      => self::setof("Data::keyword"),
-                "pwg-raster-document-resolution-supported"   => self::setof("Data::resolution"),
-                "pwg-raster-document-sheet-back"             => "Data::keyword",
-                "pwg-raster-document-type-supported"         => self::setof("Data::keyword"),
+                "proof-print-default"                        => self::underscore(self::collection("Job Template", "proof-print"), "EtdSolutions\IPP\Data::novalue"),
+                "proof-print-supported"                      => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "pwg-raster-document-resolution-supported"   => self::setof("EtdSolutions\IPP\Data::resolution"),
+                "pwg-raster-document-sheet-back"             => "EtdSolutions\IPP\Data::keyword",
+                "pwg-raster-document-type-supported"         => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "queued-job-count"                           => self::integer(0, self::$MAX),
-                "reference-uri-schemes-supported"            => self::setof("Data::uriScheme"),
-                "repertoire-supported"                       => self::setof(self::underscore("Data::keyword", "Data::name")),
-                "requesting-user-uri-supported"              => "Data::boolean",
-                "save-disposition-supported"                 => self::setof("Data::keyword"),
-                "save-document-format-default"               => "Data::mimeMediaType",
-                "save-document-format-supported"             => self::setof("Data::mimeMediaType"),
-                "save-location-default"                      => "Data::uri",
-                "save-location-supported"                    => self::setof("Data::uri"),
-                "save-name-subdirectory-supported"           => "Data::boolean",
-                "save-name-supported"                        => "Data::boolean",
+                "reference-uri-schemes-supported"            => self::setof("EtdSolutions\IPP\Data::uriScheme"),
+                "repertoire-supported"                       => self::setof(self::underscore("EtdSolutions\IPP\Data::keyword", "EtdSolutions\IPP\Data::name")),
+                "requesting-user-uri-supported"              => "EtdSolutions\IPP\Data::boolean",
+                "save-disposition-supported"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "save-document-format-default"               => "EtdSolutions\IPP\Data::mimeMediaType",
+                "save-document-format-supported"             => self::setof("EtdSolutions\IPP\Data::mimeMediaType"),
+                "save-location-default"                      => "EtdSolutions\IPP\Data::uri",
+                "save-location-supported"                    => self::setof("EtdSolutions\IPP\Data::uri"),
+                "save-name-subdirectory-supported"           => "EtdSolutions\IPP\Data::boolean",
+                "save-name-supported"                        => "EtdSolutions\IPP\Data::boolean",
                 "separator-sheets-default"                   => self::collection("Job Template", "separator-sheets"),
-                "separator-sheets-supported"                 => self::setof("Data::keyword"),
-                "sheet-collate-default"                      => "Data::keyword",
-                "sheet-collate-supported"                    => self::setof("Data::keyword"),
-                "sides-default"                              => "Data::keyword",
-                "sides-supported"                            => self::setof("Data::keyword"),
+                "separator-sheets-supported"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "sheet-collate-default"                      => "EtdSolutions\IPP\Data::keyword",
+                "sheet-collate-supported"                    => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "sides-default"                              => "EtdSolutions\IPP\Data::keyword",
+                "sides-supported"                            => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "stitching-locations-supported"              => self::setof(self::underscore(self::integer(0, self::$MAX), self::rangeOfInteger(0, self::$MAX))),
                 "stitching-offset-supported"                 => self::setof(self::underscore(self::integer(0, self::$MAX), self::rangeOfInteger(0, self::$MAX))),
-                "subordinate-printers-supported"             => self::setof("Data::uri"),
-                "uri-authentication-supported"               => self::setof("Data::keyword"),
-                "uri-security-supported"                     => self::setof("Data::keyword"),
-                "user-defined-values-supported"              => self::setof("Data::keyword"),
-                "which-jobs-supported"                       => self::setof("Data::keyword"),
-                "x-image-position-default"                   => "Data::keyword",
-                "x-image-position-supported"                 => self::setof("Data::keyword"),
-                "x-image-shift-default"                      => "Data::integer",
-                "x-image-shift-supported"                    => "Data::rangeOfInteger",
-                "x-side1-image-shift-default"                => "Data::integer",
-                "x-side1-image-shift-supported"              => "Data::rangeOfInteger",
-                "x-side2-image-shift-default"                => "Data::integer",
-                "x-side2-image-shift-supported"              => "Data::rangeOfInteger",
-                "xri-authentication-supported"               => self::setof("Data::keyword"),
-                "xri-security-supported"                     => self::setof("Data::keyword"),
-                "xri-uri-scheme-supported"                   => self::setof("Data::uriScheme"),
-                "y-image-position-default"                   => "Data::keyword",
-                "y-image-position-supported"                 => self::setof("Data::keyword"),
-                "y-image-shift-default"                      => "Data::integer",
-                "y-image-shift-supported"                    => "Data::rangeOfInteger",
-                "y-side1-image-shift-default"                => "Data::integer",
-                "y-side1-image-shift-supported"              => "Data::rangeOfInteger",
-                "y-side2-image-shift-default"                => "Data::integer",
-                "y-side2-image-shift-supported"              => "Data::rangeOfInteger"
+                "subordinate-printers-supported"             => self::setof("EtdSolutions\IPP\Data::uri"),
+                "uri-authentication-supported"               => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "uri-security-supported"                     => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "user-defined-values-supported"              => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "which-jobs-supported"                       => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "x-image-position-default"                   => "EtdSolutions\IPP\Data::keyword",
+                "x-image-position-supported"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "x-image-shift-default"                      => "EtdSolutions\IPP\Data::integer",
+                "x-image-shift-supported"                    => "EtdSolutions\IPP\Data::rangeOfInteger",
+                "x-side1-image-shift-default"                => "EtdSolutions\IPP\Data::integer",
+                "x-side1-image-shift-supported"              => "EtdSolutions\IPP\Data::rangeOfInteger",
+                "x-side2-image-shift-default"                => "EtdSolutions\IPP\Data::integer",
+                "x-side2-image-shift-supported"              => "EtdSolutions\IPP\Data::rangeOfInteger",
+                "xri-authentication-supported"               => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "xri-security-supported"                     => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "xri-uri-scheme-supported"                   => self::setof("EtdSolutions\IPP\Data::uriScheme"),
+                "y-image-position-default"                   => "EtdSolutions\IPP\Data::keyword",
+                "y-image-position-supported"                 => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "y-image-shift-default"                      => "EtdSolutions\IPP\Data::integer",
+                "y-image-shift-supported"                    => "EtdSolutions\IPP\Data::rangeOfInteger",
+                "y-side1-image-shift-default"                => "EtdSolutions\IPP\Data::integer",
+                "y-side1-image-shift-supported"              => "EtdSolutions\IPP\Data::rangeOfInteger",
+                "y-side2-image-shift-default"                => "EtdSolutions\IPP\Data::integer",
+                "y-side2-image-shift-supported"              => "EtdSolutions\IPP\Data::rangeOfInteger"
             ],
             "Subscription Description" => [
                 "notify-job-id"                => self::integer(1, self::$MAX),
                 "notify-lease-expiration-time" => self::integer(0, self::$MAX),
                 "notify-printer-up-time"       => self::integer(1, self::$MAX),
-                "notify-printer-uri"           => "Data::uri",
+                "notify-printer-uri"           => "EtdSolutions\IPP\Data::uri",
                 "notify-sequence-number"       => self::integer(0, self::$MAX),
-                "notify-subscriber-user-name"  => "Data::name",
-                "notify-subscriber-user-uri"   => "Data::uri",
+                "notify-subscriber-user-name"  => "EtdSolutions\IPP\Data::name",
+                "notify-subscriber-user-uri"   => "EtdSolutions\IPP\Data::uri",
                 "notify-subscription-id"       => self::integer(1, self::$MAX),
-                "subscription-uuid"            => "Data::uri"
+                "subscription-uuid"            => "EtdSolutions\IPP\Data::uri"
             ],
             "Subscription Template"    => [
-                "notify-attributes"               => self::setof("Data::keyword"),
-                "notify-attributes-supported"     => self::setof("Data::keyword"),
-                "notify-charset"                  => "Data::charset",
-                "notify-events"                   => self::setof("Data::keyword"),
-                "notify-events-default"           => self::setof("Data::keyword"),
-                "notify-events-supported"         => self::setof("Data::keyword"),
+                "notify-attributes"               => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "notify-attributes-supported"     => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "notify-charset"                  => "EtdSolutions\IPP\Data::charset",
+                "notify-events"                   => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "notify-events-default"           => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "notify-events-supported"         => self::setof("EtdSolutions\IPP\Data::keyword"),
                 "notify-lease-duration"           => self::integer(0, 67108863),
                 "notify-lease-duration-default"   => self::integer(0, 67108863),
                 "notify-lease-duration-supported" => self::setof(self::underscore(self::integer(0, 67108863), self::rangeOfInteger(0, 67108863))),
                 "notify-max-events-supported"     => self::integer(2, self::$MAX),
-                "notify-natural-language"         => "Data::naturalLanguage",
-                "notify-pull-method"              => "Data::keyword",
-                "notify-pull-method-supported"    => self::setof("Data::keyword"),
-                "notify-recipient-uri"            => "Data::uri",
-                "notify-schemes-supported"        => self::setof("Data::uriScheme"),
+                "notify-natural-language"         => "EtdSolutions\IPP\Data::naturalLanguage",
+                "notify-pull-method"              => "EtdSolutions\IPP\Data::keyword",
+                "notify-pull-method-supported"    => self::setof("EtdSolutions\IPP\Data::keyword"),
+                "notify-recipient-uri"            => "EtdSolutions\IPP\Data::uri",
+                "notify-schemes-supported"        => self::setof("EtdSolutions\IPP\Data::uriScheme"),
                 "notify-time-interval"            => self::integer(0, self::$MAX),
                 "notify-user-data"                => self::octetString(63)
             ]
         ];
 
         $attributes = self::resolve($attributes);
+
+        if (!isset(self::$data)) {
+            self::$data = [];
+        }
+
+        self::$data["attributes"] = $attributes;
+
+    }
+
+    protected static function seedKeywords() {
+
+        $attributes = self::get("attributes");
 
         // Keywords
         // ------------
@@ -1610,7 +1649,7 @@ class Data {
             ]
         ];
 
-        $Job_Template_attribute_names               = array_keys(attributes["Job Template"]);
+        $Job_Template_attribute_names               = array_keys($attributes["Job Template"]);
         $Job_Template_and_Operation_attribute_names = array_merge($Job_Template_attribute_names, array_keys($attributes["Operation"]));
         $Printer_attribute_names                    = array_merge(array_keys($attributes["Job Template"]), ["none"]);
         $media_name_or_size                         = array_merge($media["media name"], $media["size name"]);
@@ -1822,7 +1861,7 @@ class Data {
 //  Any Job Template attribute
             $Job_Template_attribute_names
         );
-        keywords["job-sheets"]                                  = keyword_name([
+        $keywords["job-sheets"]                                  = keyword_name([
             "first-print-stream-page",
             "job-both-sheet",
             "job-end-sheet",
@@ -1970,7 +2009,7 @@ class Data {
         );
         $keywords["media-key-supported"]                        = setof_keyword_name([
 //  Any "media" media or size keyword value
-$media_name_or_size
+            $media_name_or_size
         ]);
         $keywords["media-pre-printed"]                          = keyword_name([
             "blank",
@@ -1982,7 +2021,7 @@ $media_name_or_size
         );
         $keywords["media-ready"]                                = setof_keyword_name([
 //  Any "media" media or size keyword value
-$media_name_or_size
+            $media_name_or_size
         ]);
         $keywords["media-recycled"]                             = keyword_name([
             "none",
@@ -3290,6 +3329,15 @@ $media_name_or_size
             $keywords["y-image-position"]
         );
 
+        if (!isset(self::$data)) {
+            self::$data = [];
+        }
+
+        self::$data["keywords"] = $keywords;
+
+    }
+
+    protected static function seedStatus() {
 
         // Status Codes
         // ------------
@@ -3350,22 +3398,48 @@ $media_name_or_size
 
         $status = Util::xref($status);
 
-        self::$data = [
-            "enums"      => $enums,
-            "tags"       => $tags,
-            "versions"   => $versions,
-            "attributes" => $attributes,
-            "keywords"   => $keywords,
-            "status"     => $status
-        ];
+        if (!isset(self::$data)) {
+            self::$data = [];
+        }
+
+        self::$data["status"] = $status;
+
+    }
+
+    protected static function seed($collection = null) {
+
+        if (isset(self::$data) && isset(self::$data[$collection])) {
+            return;
+        }
+
+        switch ($collection) {
+            case "enums":
+                return self::seedEnums();
+            case "tags":
+                return self::seedTags();
+            case "versions":
+                return self::seedVersions();
+            case "attributes":
+                return self::seedAttributes();
+            case "keywords":
+                return self::seedKeywords();
+            case "status":
+                return self::seedStatus();
+            default:
+                self::seedEnums();
+                self::seedTags();
+                self::seedVersions();
+                self::seedAttributes();
+                self::seedKeywords();
+                self::seedStatus();
+
+        }
 
     }
 
     public static function get($collection, $key = null) {
 
-        if (!isset(self::$data)) {
-            self::seed();
-        }
+        self::seed($collection);
 
         if (is_string($key)) {
             return self::$data[$collection][$key];
@@ -3374,16 +3448,16 @@ $media_name_or_size
         return self::$data[$collection];
     }
 
-    protected static function text($max = null) {
+    public static function text($max = null) {
 
         return ["type" => "text", "max" => empty($max) ? 1023 : $max];
     }
 
-    protected static function integer($min = null, $max = null) {
+    public static function integer($min = null, $max = null) {
 
         $tags = self::get("tags");
 
-        if (max == MAX || $max === null) {
+        if ($max == self::$MAX || $max === null) {
             $max = 2147483647;
         }
 
@@ -3394,7 +3468,7 @@ $media_name_or_size
         return ["type" => "integer", "tag" => $tags["integer"], "min" => $min, "max" => $max];
     }
 
-    protected static function rangeOfInteger($min = null, $max = null) {
+    public static function rangeOfInteger($min = null, $max = null) {
 
         $tags = self::get("tags");
 
@@ -3409,96 +3483,96 @@ $media_name_or_size
         return ["type" => "rangeOfInteger", "tag" => $tags["rangeOfInteger"], "min" => $min, "max" => $max];
     }
 
-    protected static function boolean() {
+    public static function boolean() {
 
         $tags = self::get("tags");
 
         return ["type" => "boolean", "tag" => $tags["boolean"]];
     }
 
-    protected static function charset() {
+    public static function charset() {
 
         $tags = self::get("tags");
 
         return ["type" => "charset", "tag" => $tags["charset"], "max" => 63];
     }
 
-    protected static function keyword() {
+    public static function keyword() {
 
         $tags = self::get("tags");
 
         return ["type" => "keyword", "tag" => $tags["keyword"], "min" => 1, "max" => 1023];
     }
 
-    protected static function naturalLanguage() {
+    public static function naturalLanguage() {
 
         $tags = self::get("tags");
 
         return ["type" => "naturalLanguage", "tag" => $tags["naturalLanguage"], "max" => 63];
     }
 
-    protected static function dateTime() {
+    public static function dateTime() {
 
         $tags = self::get("tags");
 
         return ["type" => "dateTime", "tag" => $tags["dateTime"]];
     }
 
-    protected static function mimeMediaType() {
+    public static function mimeMediaType() {
 
         $tags = self::get("tags");
 
         return ["type" => "mimeMediaType", "tag" => $tags["mimeMediaType"], "max" => 255];
     }
 
-    protected static function uri($max = null) {
+    public static function uri($max = null) {
 
         $tags = self::get("tags");
 
         return ["type" => "uri", "tag" => $tags["uri"], "max" => empty($max) ? 1023 : $max];
     }
 
-    protected static function uriScheme() {
+    public static function uriScheme() {
 
         $tags = self::get("tags");
 
         return ["type" => "uriScheme", "tag" => $tags["uriScheme"], "max" => 63];
     }
 
-    protected static function enumeration() {
+    public static function enumeration() {
 
         $tags = self::get("tags");
 
         return ["type" => "enumeration", "tag" => $tags["enum"]];
     }
 
-    protected static function resolution() {
+    public static function resolution() {
 
         $tags = self::get("tags");
 
         return ["type" => "resolution", "tag" => $tags["resolution"]];
     }
 
-    protected static function unknown() {
+    public static function unknown() {
 
         $tags = self::get("tags");
 
         return ["type" => "unknown", "tag" => $tags["unknown"]];
     }
 
-    protected static function name($max = null) {
+    public static function name($max = null) {
 
         return ["type" => "name", "max" => empty($max) ? 1023 : $max];
     }
 
-    protected static function novalue() {
+    public static function novalue() {
 
         $tags = self::get("tags");
 
         return ["type" => "novalue", "tag" => $tags["no-value"]];
     }
 
-    protected static function octetString($max = null) {
+    public static function octetString($max = null) {
 
         $tags = self::get("tags");
 
@@ -3517,14 +3591,17 @@ $media_name_or_size
 
             foreach ($arguments as $i => $a) {
 
-                if (is_callable($a)) {
-                    $arguments[$i] = $a();
-                }
+                if ($i != "lookup") {
+                    if (is_callable($a)) {
+                        $arguments[$i] = call_user_func($a);
+                    }
 
-                $arguments["lookup"][$arguments[$i]["type"]] = $arguments[$i];
+                    $arguments["lookup"][$arguments[$i]["type"]] = $arguments[$i];
+                }
             }
 
-            $arguments["alts"] = implode(",", array_keys(asort($arguments["lookup"])));
+            asort($arguments["lookup"]);
+            $arguments["alts"] = implode(",", array_keys($arguments["lookup"]));
 
             return $arguments;
         });
@@ -3532,7 +3609,7 @@ $media_name_or_size
         return Util::array_some($arguments, function ($a) {
 
             return isDeferred($a);
-        }) ? $deferred : $deferred->function();
+        }) ? $deferred : ($deferred->function)();
 
     }
 
@@ -3541,12 +3618,12 @@ $media_name_or_size
     protected static function setof($type) {
 
         if (isDeferred($type)) {
-            return createDeferred(function () {
+            return createDeferred(function () use ($type) {
 
-                $type          = $type->function();
-                $type["setof"] = true;
+                $t          = ($type->function)();
+                $t["setof"] = true;
 
-                return $type;
+                return $t;
             });
         }
         if (is_callable($type)) {
@@ -3568,10 +3645,10 @@ $media_name_or_size
         }
 
         if (is_string($group)) {
-            return createDeferred(function () {
+            return createDeferred(function () use ($group, $name) {
 
-                $tags       = Data::get("tags");
-                $attributes = Data::get("attributes");
+                $tags       = self::get("tags");
+                $attributes = self::get("attributes");
 
                 return [
                     "type"    => "collection",
@@ -3581,21 +3658,24 @@ $media_name_or_size
             });
         }
 
-        $defer = Util::array_some(array_keys($group), function ($key) use ($group) {
-
-            return isDeferred($group[$key]);
-        });
+        $defer = false;
+        foreach ($group as $k => $v) {
+            $defer = isDeferred($v);
+            if ($defer) {
+                break;
+            }
+        }
 
         $deferred = createDeferred(function () use ($tags, $group) {
 
             return [
                 "type"    => "collection",
                 "tag"     => $tags["begCollection"],
-                "members" => resolve($group)
+                "members" => self::resolve($group)
             ];
         });
 
-        return $defer ? $deferred : deferred();
+        return $defer ? $deferred : ($deferred->function)();
     }
 
     protected static function resolve($obj) {

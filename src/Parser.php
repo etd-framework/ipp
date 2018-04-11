@@ -40,7 +40,7 @@ class Parser {
 
         $this->enums       = Data::get("enums");
         $this->operations  = Data::get("enums", "operations-supported");
-        $this->statusCodes = Data::get("statusCodes");
+        $this->statusCodes = Data::get("status");
         $this->tags        = Data::get("tags");
 
     }

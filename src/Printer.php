@@ -9,7 +9,7 @@
 
 namespace EtdSolutions\IPP;
 
-use GuzzleHttp\Psr7\Uri;
+use Joomla\Uri\Uri;
 
 class Printer {
 
@@ -55,7 +55,7 @@ class Printer {
         if (isset($options['uri'])) {
             $this->version = $options['uri'];
         } else {
-            $this->uri = 'ipp://' + $this->url->getHost() + $this->url->getPath();
+            $this->uri = 'ipp://' . $this->url->getHost() . $this->url->getPath();
         }
 
         if (isset($options['charset'])) {
@@ -68,13 +68,13 @@ class Printer {
 
     }
 
-    public function execute($msg = [], $operation = 'Get-Printer-Attributes', $cb = null) {
+    public function execute($msg = [], $operation = 'Get-Printer-Attributes') {
 
         $serializer = new Serializer();
         $msg        = $this->message($msg, $operation);
         $buffer     = $serializer->serialize($msg);
 
-        return new Request($this->url, $buffer, $cb);
+        return new Request($this->url, $buffer);
 
     }
 
@@ -101,7 +101,7 @@ class Printer {
 
         $msg = array_merge($base, $msg);
 
-        if ($msg["operation-attributes-tag"]["job-uri"]) {
+        if (isset($msg["operation-attributes-tag"]["job-uri"])) {
             unset($msg["operation-attributes-tag"]["printer-uri"]);
         }
 

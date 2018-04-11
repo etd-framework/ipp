@@ -66,7 +66,7 @@ class Serializer {
         $this->attributes  = Data::get("attributes");
         $this->enums       = Data::get("enums");
         $this->keywords    = Data::get("keywords");
-        $this->statusCodes = Data::get("statusCodes");
+        $this->statusCodes = Data::get("status");
 
     }
 
@@ -75,7 +75,7 @@ class Serializer {
         $this->buffer   = new Buffer(self::BUFFER_SIZE);
         $this->position = 0;
 
-        $this->write2($this->versions[$msg["version"] || self::DEFAULT_VERSION]);
+        $this->write2($this->versions[isset($msg["version"]) ? $msg["version"] : self::DEFAULT_VERSION]);
         $this->write2(isset($msg["operation"]) ? $this->operations[$msg["operation"]] : $this->statusCodes[$msg["statusCode"]]);
         $this->write4(isset($msg["id"]) ? $msg["id"] : $this->random()); // request-id
 
@@ -120,21 +120,21 @@ class Serializer {
     protected function write1($val) {
 
         $this->checkBufferSize(1);
-        $this->buffer->writeUInt8($val, $this->position);
+        $this->buffer->writeInt8($val, $this->position);
         $this->position += 1;
     }
 
     protected function write2($val) {
 
         $this->checkBufferSize(2);
-        $buf->writeUInt16BE($val, $this->position);
+        $this->buffer->writeInt16BE($val, $this->position);
         $this->position += 2;
     }
 
     protected function write4($val) {
 
         $this->checkBufferSize(4);
-        $this->buffer->writeUInt32BE($val, $this->position);
+        $this->buffer->writeInt32BE($val, $this->position);
         $this->position += 4;
     }
 

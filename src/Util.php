@@ -20,13 +20,13 @@ class Util {
      */
     public static function xref(array $a) {
 
-        $obj = new \stdClass();
+        $obj = [];
 
         foreach ($a as $k => $v) {
-            $obj->{$v} = $k;
+            $obj[$v] = $k;
         }
 
-        $obj->lookup = $a;
+        $obj["lookup"] = $a;
 
         return $obj;
 
