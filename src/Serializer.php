@@ -70,6 +70,10 @@ class Serializer {
 
     }
 
+    /**
+     * @param array $msg
+     * @return Buffer
+     */
     public function serialize($msg) {
 
         $this->msg      = $msg;
@@ -287,7 +291,7 @@ class Serializer {
         }
     }
 
-    protected function writeValue($tag, $value, $submembers) {
+    protected function writeValue($tag, $value, $submembers = null) {
 
         switch ($tag) {
             case $this->tags["enum"]:
@@ -298,7 +302,7 @@ class Serializer {
 
             case $this->tags["integer"]:
                 $this->write2(0x0004);
-                $this->write4(value);
+                $this->write4($value);
 
                 return;
 

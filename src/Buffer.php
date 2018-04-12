@@ -115,9 +115,13 @@ class Buffer extends ByteBuffer {
 
         $list = (array) $list;
 
-        if (!isset($totalLength)) {
+        if (!is_integer($totalLength)) {
             foreach ($list as $buffer) {
-                $totalLength += $buffer->length();
+                if ($buffer instanceof Buffer) {
+                    $totalLength += $buffer->length();
+                } elseif (is_array($buffer)) {
+                    $totalLength += sizeof($buffer);
+                }
             }
         }
 

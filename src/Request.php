@@ -21,7 +21,7 @@ class Request {
     /**
      * Request constructor.
      * @param Uri|string $url
-     * @param Buffer|callable $buffer
+     * @param Buffer $buffer
      */
     public function __construct($url, $buffer) {
 
@@ -59,7 +59,7 @@ class Request {
         $http   = HttpFactory::getHttp($opts, $this->adapter);
         $parser = new Parser();
 
-        $response = $http->post($url, (string) $buffer, $headers);
+        $response = $http->post($url, $buffer->toString(), $headers);
         if ($response->code != 200) {
             var_dump($response);
             throw new \RuntimeException('Received unexpected response status ' . $response->code . ' from the printer.', $response->code);
