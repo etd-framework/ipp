@@ -36,6 +36,8 @@ class Parser {
      */
     protected $obj;
 
+    protected $encoding = 'utf8';
+
     public function __construct() {
 
         $this->enums       = Data::get("enums");
@@ -45,14 +47,10 @@ class Parser {
 
     }
 
-    /**
-     * @param Buffer $buffer
-     */
     public function parse($buffer) {
 
         $this->buffer   = $buffer;
         $this->position = 0;
-        $this->encoding = 'utf8';
         $this->obj      = [];
 
         $this->obj["version"] = $this->read1() . '.' . $this->read1();
@@ -64,11 +62,11 @@ class Parser {
         //values overlap. In these cases, the parser will give both and
         //the consumer can ignore (or delete) whichever they don't want.
 
-        if ($bytes2and3 >= 0x02 || $bytes2and3 <= 0x3D) {
+        if ($bytes2and3 >= 2 && $bytes2and3 <= 61) {
             $this->obj["operation"] = $this->operations["lookup"][$bytes2and3];
         }
 
-        if ($bytes2and3 <= 0x0007 || $bytes2and3 >= 0x0400) {
+        if ($bytes2and3 <= 7 || $bytes2and3 >= 1024) {
             $this->obj["statusCode"] = $this->statusCodes["lookup"][$bytes2and3];
         }
 
@@ -76,8 +74,7 @@ class Parser {
         $this->readGroups();
 
         if ($this->position < $this->buffer->length()) {
-            $this->obj["data"] = $this->buffer->toString(/*$this->encoding, */
-                $this->position);
+            $this->obj["data"] = $this->buffer->toString($this->encoding, $this->position);
         }
 
         return $this->obj;
@@ -86,33 +83,42 @@ class Parser {
 
     protected function read1() {
 
-        return $this->buffer->getBufferArray()[$this->position++];
+        $val = $this->buffer->readInt8($this->position);
+        $this->incrementPosition(1);
+
+        return $val;
     }
 
     protected function read2() {
 
-        $val            = $this->buffer->readInt16BE($this->position);
-        $this->position += 2;
+        $val = $this->buffer->readInt16BE($this->position);
+        $this->incrementPosition(2);
 
         return $val;
     }
 
     protected function read4() {
 
-        $val            = $this->buffer->readInt32BE(position);
-        $this->position += 4;
+        $val = $this->buffer->readInt32BE($this->position);
+        $this->incrementPosition(4);
 
         return $val;
     }
 
-    protected function read($length, $enc = 'utf8') {
+    protected function read($length, $encoding = null) {
 
         if ($length == 0) {
             return '';
         }
 
-        return $this->buffer . toString(/*$enc || $this->encoding, */
-                $this->position, $this->position += $length);
+        if (!isset($encoding)) {
+            $encoding = $this->encoding;
+        }
+
+        $val = $this->buffer->toString($encoding, $this->position, $length);
+        $this->incrementPosition($length);
+
+        return $val;
     }
 
     protected function readGroups() {
@@ -124,69 +130,128 @@ class Parser {
 
     protected function readGroup($group) {
 
-        $name  = $this->tags["lookup"][$group];
-        $group = [];
-        if (isset($this->obj[$name])) {
+        //echo "\n\nbegin readGroup($group)\n\n";
 
-            if (!is_array($this->obj[$name])) {
-                $this->obj[$name] = [$this->obj[$name]];
+        if (isset($this->tags["lookup"][$group])) {
+
+            $name = $this->tags["lookup"][$group];
+            //echo "tag_name = $name\n";
+
+            $grp = [];
+            while (hexdec(bin2hex($this->buffer->getByteRaw($this->position))) >= 15) {// delimiters are between 0x00 to 0x0F
+                $this->readAttr($grp);
             }
 
-            $this->obj[$name][] = $group;
-        } else {
-            $this->obj[$name] = $group;
+            if (isset($this->obj[$name])) {
+
+                //echo "$name is set\n";
+
+                if (!is_array($this->obj[$name])) {
+                    $this->obj[$name] = [$this->obj[$name]];
+                }
+
+                $this->obj[$name][] = $grp;
+            } else {
+                $this->obj[$name] = $grp;
+            }
+
         }
 
-        while ($this->buffer[$this->position] >= 0x0F) {// delimiters are between 0x00 to 0x0F
-            $this->readAttr($group);
-        }
+        //echo "\nend readGroup($group)\n\n";
+        //print_r($this->obj);
+        //if ($group == 4) die;
     }
 
     protected function readAttr(&$group) {
 
+        //echo "\n begin readAttr()\n";
+
         $tag = $this->read1();
+
+        /*echo "tag = $tag\n";
+        echo "lookup = " . $this->tags["lookup"][$tag] . "\n";*/
+
         //@TODO: find a test for this
-        if ($tag === 0x7F) {//tags.extension
+        if ($tag == $this->tags["extension"]) {//tags.extension
             $tag = $this->read4();
         }
-        $name         = $this->read($this->read2());
+        $name = $this->read($this->read2());
+        //echo "name = $name\n";
         $group[$name] = $this->readValues($tag, $name);
+
+        //echo "\n end readAttr()\n";
+
+        return;
     }
 
     protected function hasAdditionalValue() {
 
-        $buf     = $this->buffer->getBufferArray();
-        $current = $buf[$this->position];
+        //echo "hasAdditionalValue()\n";
 
-        return $current !== 0x4A //tags.memberAttrName
-            && $current !== 0x37 //tags.endCollection
-            && $current !== 0x03 //tags.end-of-attributes-tag
-            && $buf[$this->position + 1] === 0x00 && $buf[$this->position + 2] === 0x00;
+        $buf     = $this->buffer->getBufferArray();
+        $current = bin2hex($this->buffer->getByteRaw($this->position));
+
+        /*echo "current = $current\n";
+        echo "#1 => " . ($current !== "4A" ? "YES" : "NO") . "\n";
+        echo "#2 => " . ($current !== "37" ? "YES" : "NO") . "\n";
+        echo "#3 => " . ($current !== "03" ? "YES" : "NO") . "\n";
+        echo "#4 => " . (isset($buf[$this->position + 1]) && bin2hex($buf[$this->position + 1]) === "00" ? "YES" : "NO") . "\n";
+        echo "#5 => " . (isset($buf[$this->position + 2]) && bin2hex($buf[$this->position + 2]) === "00" ? "YES" : "NO") . "\n";*/
+
+        $res = $current !== "4A" // memberAttrName
+            && $current !== "37" // endCollection
+            && $current !== "03" // end-of-attributes-tag
+            && isset($buf[$this->position + 1]) && bin2hex($buf[$this->position + 1]) === "00"
+            && isset($buf[$this->position + 2]) && bin2hex($buf[$this->position + 2]) === "00";
+
+        //echo "hasAdditionalValue = " . ($res ? "TRUE" : "FALSE") . "\n";
+
+        return $res;
     }
 
-    protected function readValues($type, $name) {
+    protected function readValues($type, $name = null) {
+
+        //echo "begin readValues($type, $name)\n";
 
         $value = $this->readValue($type, $name);
+
+        /*echo "value #1 = ";
+        print_r($value);
+        echo "\n";*/
+
         if ($this->hasAdditionalValue()) {
+            //echo "hasAdditionalValue YES\n";
             $value = (array) $value;
             do {
                 $type = $this->read1();
+                //echo "tag = $type\n";
                 $this->read2();//empty name
-                $value[] = $this->readValue($type, $name);
+                $v = $this->readValue($type, $name);
+                //echo "value IN = $v\n";
+                $value[] = $v;
             } while ($this->hasAdditionalValue());
         }
+
+        /*echo "value #2 = ";
+        print_r($value);
+        echo "\n";
+
+        echo "end readValues($type, $name)\n";*/
 
         return $value;
     }
 
-    protected function readValue($tag, $name) {
+    protected function readValue($tag, $name = null) {
+
+        /*echo "readValue($tag, $name)\n";
+        echo "lookup = " . $this->tags["lookup"][$tag] . "\n";*/
 
         $length = $this->read2();
         //http://tools.ietf.org/html/rfc2910#section-3.9
         switch ($tag) {
             case $this->tags["enum"]:
                 $val = $this->read4();
-                if (isset($this->enums[$name])) {
+                if (isset($this->enums[$name]) && isset($this->enums[$name]["lookup"][$val])) {
                     return $this->enums[$name]["lookup"][$val];
                 }
 
@@ -205,11 +270,18 @@ class Parser {
 
             case $this->tags["dateTime"]:
                 // http://tools.ietf.org/html/rfc1903 page 17
-                throw new \RuntimeException('TODO !');
-            /*$time = $this->read2(), $this->read1(), $this->read1(), $this->read1(), $this->read1(), $this->read1(), $this->read1();
-            $date = new \DateTime($time);
-            //silly way to add on the timezone
-            return new Date(date.toISOString().substr(0,23).replace('T',',') +','+ String.fromCharCode($this->read(1)) + $this->read(1) + ':' + $this->read(1));*/
+                $year  = $this->read2();
+                $month = $this->read1();
+                $day   = $this->read1();
+                $hour  = $this->read1();
+                $mins  = $this->read1();
+                $secs  = $this->read1();
+                $mili  = $this->read1();
+                $tz_s  = $this->read(1);
+                $this->read(1);
+                $this->read(1);
+
+                return "DATE";
 
             case $this->tags["textWithLanguage"]:
             case $this->tags["nameWithLanguage"]:
@@ -243,7 +315,7 @@ class Parser {
 
                 $value = $length ? $this->read($length) : null;
 
-                error_log("The spec is not clear on how to handle tag " . $tag . ": " . $name . "=" . ((string) $value) . ". Please open a github issue to help find a solution!");
+                echo("The spec is not clear on how to handle tag " . $tag . ": " . $name . "=" . ((string) $value) . ". Please open a github issue to help find a solution!\n");
 
                 return $value;
 
@@ -252,19 +324,24 @@ class Parser {
 
     protected function readCollection() {
 
-        $tag;
+        //echo "begin readCollection()\n";
+
         $collection = [];
 
-        while (($tag = $this->read1()) !== 0x37) {//tags.endCollection
-            if ($tag !== 0x4A) {
-                error_log("unexpected:" . $this->tags["lookup"][$tag]);
+        while (($tag = $this->read1()) !== $this->tags["endCollection"] ) { //tags.endCollection
+            if ($tag !== $this->tags["memberAttrName"]) {
+                echo("unexpected:" . $this->tags["lookup"][$tag]);
 
-                return;
+                return $collection;
             }
             //read nametag name and discard it
             $this->read($this->read2());
             $name              = $this->readValue(0x4A);
+            //echo "name = $name\n";
             $values            = $this->readCollectionItemValue();
+            /*echo "values = ";
+            print_r($values);
+            echo "\n";*/
             $collection[$name] = $values;
         }
         //Read endCollection name & value and discard it.
@@ -276,17 +353,33 @@ class Parser {
         return $collection;
     }
 
-    protected function readCollectionItemValue($name) {
+    protected function readCollectionItemValue($name = null) {
+
+        //echo "begin readCollectionItemValue($name)\n";
 
         $tag = $this->read1();
+
+        //echo "tag = $tag\n";
+
         //TODO: find a test for this
-        if ($tag === 0x7F) {//tags.extension
+        if ($tag === $this->tags["extension"]) {//tags.extension
             $tag = $this->read4();
         }
         //read valuetag name and discard it
         $this->read($this->read2());
 
-        return $this->readValues(tag, name);
+        return $this->readValues($tag, $name);
+    }
+
+    protected function incrementPosition($val) {
+
+        if ($this->position + $val > $this->buffer->length()) {
+            $d = debug_backtrace();
+            foreach ($d as $i => $a) {
+                echo "#$i " . $a["file"] . ":" . $a["line"] . " " . get_class($a["object"]) . $a["type"] . $a["function"] . "()\n";
+            }
+        }
+        $this->position += $val;
     }
 
 }

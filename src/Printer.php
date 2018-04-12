@@ -74,7 +74,8 @@ class Printer {
         $msg        = $this->message($msg, $operation);
         $buffer     = $serializer->serialize($msg);
 
-        return new Request($this->url, $buffer);
+        $request = new Request($this->url, $buffer);
+        return $request->getResponse();
 
     }
 

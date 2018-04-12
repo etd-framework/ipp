@@ -14,6 +14,10 @@ use Joomla\Uri\Uri;
 
 class Request {
 
+    protected $adapter = 'curl';
+
+    protected $response;
+
     /**
      * Request constructor.
      * @param Uri|string $url
@@ -22,6 +26,8 @@ class Request {
     public function __construct($url, $buffer) {
 
         $opts = [
+            /*"userauth" => "webquin",
+            "passwordauth" => "webquin",*/
             "transport.curl" => [
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_SSL_VERIFYHOST => false
@@ -50,20 +56,24 @@ class Request {
             $url->setScheme('https');
         }
 
-        $http   = HttpFactory::getHttp($opts);
+        $http   = HttpFactory::getHttp($opts, $this->adapter);
         $parser = new Parser();
-var_dump($buffer);die;
-        $response = $http->post($url, (string) $buffer, $headers);
 
+        $response = $http->post($url, (string) $buffer, $headers);
         if ($response->code != 200) {
-            throw new \RuntimeException('Received unexpected response status ' . $response->code . ' from the printer', $response->code);
+            var_dump($response);
+            throw new \RuntimeException('Received unexpected response status ' . $response->code . ' from the printer.', $response->code);
         }
 
         $obj = $parser->parse(Buffer::concat($response->body, strlen($response->body)));
         unset($obj["operation"]);
 
-        return $obj;
+        $this->response = $obj;
 
+    }
+
+    public function getResponse() {
+        return $this->response;
     }
 
 }

@@ -44,4 +44,11 @@ class Util {
 
     }
 
+    public static function random() {
+
+        $int = (float) mt_rand() / (float ) mt_getrandmax();
+
+        return substr((string) $int, -8);
+    }
+
 }

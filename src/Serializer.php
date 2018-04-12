@@ -72,17 +72,18 @@ class Serializer {
 
     public function serialize($msg) {
 
+        $this->msg      = $msg;
         $this->buffer   = new Buffer(self::BUFFER_SIZE);
         $this->position = 0;
 
-        $this->write2($this->versions[isset($msg["version"]) ? $msg["version"] : self::DEFAULT_VERSION]);
-        $this->write2(isset($msg["operation"]) ? $this->operations[$msg["operation"]] : $this->statusCodes[$msg["statusCode"]]);
-        $this->write4(isset($msg["id"]) ? $msg["id"] : $this->random()); // request-id
+        $this->write2($this->versions[isset($this->msg["version"]) ? $this->msg["version"] : self::DEFAULT_VERSION]);
+        $this->write2(isset($this->msg["operation"]) ? $this->operations[$this->msg["operation"]] : $this->statusCodes[$this->msg["statusCode"]]);
+        $this->write4(isset($this->msg["id"]) ? $this->msg["id"] : Util::random()); // request-id
 
         $this->writeGroup('operation-attributes-tag');
         $this->writeGroup('job-attributes-tag');
         $this->writeGroup('printer-attributes-tag');
-        $this-> writeGroup('document-attributes-tag');
+        $this->writeGroup('document-attributes-tag');
         //@TODO add the others
 
         $this->write1(0x03); //end
@@ -101,13 +102,6 @@ class Serializer {
 
         return $buf2;
 
-    }
-
-    protected function random() {
-
-        $int = (float) mt_rand() / (float ) mt_getrandmax();
-
-        return substr((string) $int, -8);
     }
 
     protected function checkBufferSize($length) {
@@ -138,7 +132,17 @@ class Serializer {
         $this->position += 4;
     }
 
-    protected function write($str, $enc = null) {
+    protected function write($str, $encoding = null) {
+
+        if (!isset($encoding)) {
+            $encoding = 'utf8';
+        }
+
+        if ($encoding == 'utf8') {
+            $str = utf8_encode($str);
+        } elseif ($encoding == 'ascii') {
+            $str = mb_convert_encoding($str, "ASCII");
+        }
 
         $length = strlen($str);
         $this->write2($length);
@@ -149,19 +153,18 @@ class Serializer {
 
     protected function writeGroup($tag) {
 
-        $attrs = $this->msg[$tag];
-
-        if (empty($this->msg[$tag])) {
+        if (!isset($this->msg[$tag])) {
             return;
         }
 
+        $attrs = $this->msg[$tag];
         $keys = array_keys($attrs);
 
         //'attributes-charset' and 'attributes-natural-language' need to come first- so we sort them to the front
-        if ($tag == $this->tags['operation-attributes-tag']) {
+        if ($tag == 'operation-attributes-tag') {
             usort($keys, function ($a, $b) {
 
-                return (self::SPECIAL[$a] || 3) - (self::SPECIAL[$b] || 3);
+                return (isset(self::SPECIAL[$a]) ? self::SPECIAL[$a] : 3) - (isset(self::SPECIAL[$b]) ? self::SPECIAL[$b] : 3);
             });
         }
 
@@ -201,7 +204,7 @@ class Serializer {
         foreach ($value as $i => $v) {
 
             //we need to re-evaluate the alternates every time
-            $syntax2 = is_array($syntax) ? $this->resolveAlternates($syntax, $name, $v) : $syntax;
+            $syntax2 = is_array($syntax) && isset($syntax["setof"]) ? $this->resolveAlternates($syntax, $name, $v) : $syntax;
             $tag     = $this->getTag($syntax2, $name, $v);
 
             if ($tag === $this->tags["enum"]) {
@@ -215,7 +218,7 @@ class Serializer {
                 $this->write2(0x0000); //empty name
             }
 
-            $this->writeValue($tag, $v, $syntax2["members"]);
+            $this->writeValue($tag, $v, isset($syntax2["members"]) ? $syntax2["members"] : null);
 
         }
     }
@@ -232,6 +235,10 @@ class Serializer {
     }
 
     protected function resolveAlternates($array, $name, $value) {
+
+        if (!isset($array["alts"])) {
+            throw new \RuntimeException("Unknown atlernates");
+        }
 
         switch ($array["alts"]) {
             case 'keyword,name':
@@ -376,7 +383,7 @@ class Serializer {
             $subvalue  = $value[$key];
             $subsyntax = $members[$key];
 
-            if (is_array($subsyntax)) {
+            if (is_array($subsyntax) && isset($subsyntax["setof"])) {
                 $subsyntax = $this->resolveAlternates($subsyntax, $key, $subvalue);
             }
 
