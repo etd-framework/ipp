@@ -280,7 +280,7 @@ class Parser {
 
                 $value = $length ? $this->read($length) : null;
 
-                echo("The spec is not clear on how to handle tag " . $tag . ": " . $name . "=" . ((string) $value) . ". Please open a github issue to help find a solution!\n");
+                error_log("[IPP] The spec is not clear on how to handle tag " . $tag . ": " . $name . "=" . ((string) $value) . ". Please open a github issue to help find a solution!\n");
 
                 return $value;
 
@@ -293,7 +293,7 @@ class Parser {
 
         while (($tag = $this->read1()) !== $this->tags["endCollection"]) { //tags.endCollection
             if ($tag !== $this->tags["memberAttrName"]) {
-                echo("unexpected:" . $this->tags["lookup"][$tag]);
+                error_log("[IPP] unexpected:" . $this->tags["lookup"][$tag]);
 
                 return $collection;
             }
