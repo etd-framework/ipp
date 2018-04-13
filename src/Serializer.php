@@ -9,6 +9,8 @@
 
 namespace EtdSolutions\IPP;
 
+use EtdSolutions\ByteBuffer\ByteBuffer;
+
 class Serializer {
 
     const DEFAULT_VERSION = "2.0";
@@ -44,7 +46,7 @@ class Serializer {
     protected $statusCodes;
 
     /**
-     * @var Buffer
+     * @var ByteBuffer
      */
     protected $buffer;
 
@@ -72,12 +74,12 @@ class Serializer {
 
     /**
      * @param array $msg
-     * @return Buffer
+     * @return ByteBuffer
      */
     public function serialize($msg) {
 
         $this->msg      = $msg;
-        $this->buffer   = new Buffer(self::BUFFER_SIZE);
+        $this->buffer   = new ByteBuffer(self::BUFFER_SIZE);
         $this->position = 0;
 
         $this->write2($this->versions[isset($this->msg["version"]) ? $this->msg["version"] : self::DEFAULT_VERSION]);
@@ -96,11 +98,11 @@ class Serializer {
             return $this->buffer->slice(0, $this->position);
         }
 
-        if (!Buffer::isBuffer($msg["data"])) {
+        if (!ByteBuffer::isBuffer($msg["data"])) {
             throw new \RuntimeException("data must be a Buffer");
         }
 
-	    $buf2 = new Buffer($this->position + $msg["data"]->length());
+	    $buf2 = new ByteBuffer($this->position + $msg["data"]->length());
 	    $this->buffer->copy($buf2, 0, 0, $this->position);
         $msg["data"]->copy($buf2, $this->position, 0);
 
@@ -111,7 +113,7 @@ class Serializer {
     protected function checkBufferSize($length) {
 
         if ($this->position + $length > $this->buffer->length()) {
-            $this->buffer = Buffer::concat([$this->buffer], 2 * $this->buffer->length());
+            $this->buffer = ByteBuffer::concat([$this->buffer], 2 * $this->buffer->length());
         }
     }
 

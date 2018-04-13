@@ -17,6 +17,8 @@ class Util {
      * converts the arrays to objects and tacks on a 'lookup' property.
      *
      * @param array $a
+     *
+     * @return array
      */
     public static function xref(array $a) {
 

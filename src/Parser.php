@@ -9,6 +9,8 @@
 
 namespace EtdSolutions\IPP;
 
+use EtdSolutions\ByteBuffer\ByteBuffer;
+
 class Parser {
 
     const RS = "\u001e";
@@ -22,7 +24,7 @@ class Parser {
     protected $tags;
 
     /**
-     * @var Buffer
+     * @var ByteBuffer
      */
     protected $buffer;
 
@@ -47,6 +49,11 @@ class Parser {
 
     }
 
+    /**
+     * @param ByteBuffer $buffer
+     *
+     * @return array
+     */
     public function parse($buffer) {
 
         $this->buffer   = $buffer;
@@ -130,12 +137,9 @@ class Parser {
 
     protected function readGroup($group) {
 
-        //echo "\n\nbegin readGroup($group)\n\n";
-
         if (isset($this->tags["lookup"][$group])) {
 
             $name = $this->tags["lookup"][$group];
-            //echo "tag_name = $name\n";
 
             $grp = [];
             while (hexdec(bin2hex($this->buffer->getByteRaw($this->position))) >= 15) {// delimiters are between 0x00 to 0x0F
@@ -144,59 +148,38 @@ class Parser {
 
             if (isset($this->obj[$name])) {
 
-                //echo "$name is set\n";
-
                 if (!is_array($this->obj[$name])) {
                     $this->obj[$name] = [$this->obj[$name]];
                 }
-
                 $this->obj[$name][] = $grp;
+
             } else {
                 $this->obj[$name] = $grp;
             }
 
         }
 
-        //echo "\nend readGroup($group)\n\n";
-        //print_r($this->obj);
-        //if ($group == 4) die;
     }
 
     protected function readAttr(&$group) {
 
-        //echo "\n begin readAttr()\n";
-
         $tag = $this->read1();
-
-        /*echo "tag = $tag\n";
-        echo "lookup = " . $this->tags["lookup"][$tag] . "\n";*/
 
         //@TODO: find a test for this
         if ($tag == $this->tags["extension"]) {//tags.extension
             $tag = $this->read4();
         }
-        $name = $this->read($this->read2());
-        //echo "name = $name\n";
-        $group[$name] = $this->readValues($tag, $name);
 
-        //echo "\n end readAttr()\n";
+        $name         = $this->read($this->read2());
+        $group[$name] = $this->readValues($tag, $name);
 
         return;
     }
 
     protected function hasAdditionalValue() {
 
-        //echo "hasAdditionalValue()\n";
-
         $buf     = $this->buffer->getBufferArray();
         $current = bin2hex($this->buffer->getByteRaw($this->position));
-
-        /*echo "current = $current\n";
-        echo "#1 => " . ($current !== "4A" ? "YES" : "NO") . "\n";
-        echo "#2 => " . ($current !== "37" ? "YES" : "NO") . "\n";
-        echo "#3 => " . ($current !== "03" ? "YES" : "NO") . "\n";
-        echo "#4 => " . (isset($buf[$this->position + 1]) && bin2hex($buf[$this->position + 1]) === "00" ? "YES" : "NO") . "\n";
-        echo "#5 => " . (isset($buf[$this->position + 2]) && bin2hex($buf[$this->position + 2]) === "00" ? "YES" : "NO") . "\n";*/
 
         $res = $current !== "4A" // memberAttrName
             && $current !== "37" // endCollection
@@ -204,49 +187,31 @@ class Parser {
             && isset($buf[$this->position + 1]) && bin2hex($buf[$this->position + 1]) === "00"
             && isset($buf[$this->position + 2]) && bin2hex($buf[$this->position + 2]) === "00";
 
-        //echo "hasAdditionalValue = " . ($res ? "TRUE" : "FALSE") . "\n";
-
         return $res;
     }
 
     protected function readValues($type, $name = null) {
 
-        //echo "begin readValues($type, $name)\n";
-
         $value = $this->readValue($type, $name);
 
-        /*echo "value #1 = ";
-        print_r($value);
-        echo "\n";*/
-
         if ($this->hasAdditionalValue()) {
-            //echo "hasAdditionalValue YES\n";
+
             $value = (array) $value;
             do {
                 $type = $this->read1();
-                //echo "tag = $type\n";
                 $this->read2();//empty name
-                $v = $this->readValue($type, $name);
-                //echo "value IN = $v\n";
+                $v       = $this->readValue($type, $name);
                 $value[] = $v;
             } while ($this->hasAdditionalValue());
         }
-
-        /*echo "value #2 = ";
-        print_r($value);
-        echo "\n";
-
-        echo "end readValues($type, $name)\n";*/
 
         return $value;
     }
 
     protected function readValue($tag, $name = null) {
 
-        /*echo "readValue($tag, $name)\n";
-        echo "lookup = " . $this->tags["lookup"][$tag] . "\n";*/
-
         $length = $this->read2();
+
         //http://tools.ietf.org/html/rfc2910#section-3.9
         switch ($tag) {
             case $this->tags["enum"]:
@@ -324,11 +289,9 @@ class Parser {
 
     protected function readCollection() {
 
-        //echo "begin readCollection()\n";
-
         $collection = [];
 
-        while (($tag = $this->read1()) !== $this->tags["endCollection"] ) { //tags.endCollection
+        while (($tag = $this->read1()) !== $this->tags["endCollection"]) { //tags.endCollection
             if ($tag !== $this->tags["memberAttrName"]) {
                 echo("unexpected:" . $this->tags["lookup"][$tag]);
 
@@ -337,11 +300,7 @@ class Parser {
             //read nametag name and discard it
             $this->read($this->read2());
             $name              = $this->readValue(0x4A);
-            //echo "name = $name\n";
             $values            = $this->readCollectionItemValue();
-            /*echo "values = ";
-            print_r($values);
-            echo "\n";*/
             $collection[$name] = $values;
         }
         //Read endCollection name & value and discard it.
@@ -355,16 +314,13 @@ class Parser {
 
     protected function readCollectionItemValue($name = null) {
 
-        //echo "begin readCollectionItemValue($name)\n";
-
         $tag = $this->read1();
-
-        //echo "tag = $tag\n";
 
         //TODO: find a test for this
         if ($tag === $this->tags["extension"]) {//tags.extension
             $tag = $this->read4();
         }
+
         //read valuetag name and discard it
         $this->read($this->read2());
 
@@ -373,12 +329,6 @@ class Parser {
 
     protected function incrementPosition($val) {
 
-        if ($this->position + $val > $this->buffer->length()) {
-            $d = debug_backtrace();
-            foreach ($d as $i => $a) {
-                echo "#$i " . $a["file"] . ":" . $a["line"] . " " . get_class($a["object"]) . $a["type"] . $a["function"] . "()\n";
-            }
-        }
         $this->position += $val;
     }
 

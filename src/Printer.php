@@ -53,7 +53,7 @@ class Printer {
         }
 
         if (isset($options['uri'])) {
-            $this->version = $options['uri'];
+            $this->uri = $options['uri'];
         } else {
             $this->uri = 'ipp://' . $this->url->getHost() . $this->url->getPath();
         }
@@ -100,7 +100,7 @@ class Printer {
             $base["operation-attributes-tag"]["job-uri"] = $msg["operation-attributes-tag"]["job-uri"];
         }
 
-        $msg = array_merge($base, $msg);
+        $msg = array_replace_recursive($base, $msg);
 
         if (isset($msg["operation-attributes-tag"]["job-uri"])) {
             unset($msg["operation-attributes-tag"]["printer-uri"]);
